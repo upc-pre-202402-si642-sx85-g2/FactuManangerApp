@@ -61,51 +61,55 @@ export default {
 </template>
 
 <style>
-*{
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-.logo img{
+.sidebar {
+  background-color: #4A79F7;
+  border-radius: 0 15px 15px 0;
+  display: flex;
+  flex-direction: column;
+  filter: drop-shadow(0 0 4px rgba(0,0,0,0.5));
+  height: 100vh;
+  padding: 50px;
+  position: fixed;
+  width: 320px;
+}
+
+.logo img {
   margin-bottom: 50px;
   width: 220px;
 }
 
-.option{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 40px;
-  width: 100%;
-  height:45px;
+.navigation {
+  overflow-y: auto;
+  width: 250px;
 }
 
-.option a{
-  text-decoration: none;
-  color: #e1effd;
-  font-size: 1.5rem;
-  font-family: 'Lato',sans-serif;
-}
-
-.option i{
-  margin-right: 20px;
-}
-
-.sidebar{
-  background-color: #4A79F7;
-  height:100vh;
-  width: 320px;
-  display:flex;
-  flex-direction: column;
-  padding: 50px;
-  border-radius: 0 15px 15px 0;
-  filter:drop-shadow(0 0 4px rgba(0,0,0,0.5));
-}
-
-.navigation li{
+.navigation li {
   list-style: none;
 }
 
+.option {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  height: 45px;
+  margin-bottom: 40px;
+  width: 100%;
+}
 
+.option a {
+  color: #e1effd;
+  font-family: 'Lato', sans-serif;
+  font-size: 1.5rem;
+  text-decoration: none;
+}
+
+.option i {
+  margin-right: 20px;
+}
 </style>
