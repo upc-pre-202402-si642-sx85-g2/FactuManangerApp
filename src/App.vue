@@ -1,19 +1,12 @@
 <script setup>
-
+import sidebar from "./public/sidebar.component.vue";
 </script>
 
 <template>
-
-  <span class="peña">
-    <img src="./assets/peña.png" alt="Manuel Peña">
-  </span>
+  <sidebar/>
 
 </template>
 
 <style>
-.peña{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 </style>
