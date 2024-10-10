@@ -3,17 +3,13 @@
 </script>
 
 <template>
-
-  <span class="peña">
-    <img src="./assets/peña.png" alt="Manuel Peña">
-  </span>
-
+  <main>
+    <RouterView></RouterView>
+  </main>
 </template>
 
 <style>
-.peña{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+main{
+  width: 100%;
 }
 </style>
