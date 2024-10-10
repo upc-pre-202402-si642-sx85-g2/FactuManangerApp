@@ -8,39 +8,49 @@ export default {
 
   <div class="sidebar">
     <div class="logo">
-      <img src="/src/assets/logo.svg">
+      <img src="/src/assets/logo.svg" alt="FactuManager's logo">
     </div>
 
     <div class="navigation">
       <ul>
         <li>
           <div class="option">
-            <i class="pi pi-home" style="font-size: 1.8rem"></i>
-            Inicio
+            <router-link to="/home">
+              <i class="pi pi-home" style="font-size: 1.8rem"></i>
+              Inicio
+            </router-link>
           </div>
         </li>
         <li>
           <div class="option">
-            <i class="pi pi-book" style="font-size: 1.8rem"></i>
-            Cartera
+            <router-link to="/home">
+              <i class="pi pi-book" style="font-size: 1.8rem"></i>
+              Cartera
+            </router-link>
           </div>
         </li>
         <li>
           <div class="option">
-            <i class="pi pi-database" style="font-size: 1.8rem"></i>
-            Operaciones
+            <router-link to="/home">
+              <i class="pi pi-database" style="font-size: 1.8rem"></i>
+              Operaciones
+            </router-link>
           </div>
         </li>
         <li>
           <div class="option">
-            <i class="pi pi-cog" style="font-size: 1.8rem"></i>
-            Registro
+            <router-link to="/home">
+              <i class="pi pi-cog" style="font-size: 1.8rem"></i>
+              Registro
+            </router-link>
           </div>
         </li>
         <li>
           <div class="option">
-            <i class="pi pi-sign-out" style="font-size: 1.8rem"></i>
-            Salir
+            <router-link to="/home">
+              <i class="pi pi-sign-out" style="font-size: 1.8rem"></i>
+              Salir
+            </router-link>
           </div>
         </li>
       </ul>
@@ -71,7 +81,7 @@ export default {
   height:45px;
 }
 
-.option{
+.option a{
   text-decoration: none;
   color: #e1effd;
   font-size: 1.5rem;

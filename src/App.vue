@@ -1,9 +1,9 @@
 <script setup>
-import sidebar from "./public/sidebar.component.vue";
+import Sidebar from "./public/sidebar.component.vue";
 </script>
 
 <template>
-  <sidebar/>
+  <sidebar></sidebar>
 
 </template>
 
