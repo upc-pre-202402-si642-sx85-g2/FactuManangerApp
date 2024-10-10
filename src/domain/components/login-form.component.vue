@@ -79,14 +79,14 @@ export default {
   align-items: center;
   flex-direction: column;
   gap: 1em;
-  margin-top: 2em;
+  margin-top: 1.5em;
 }
 .error {
   color: red;
   font-size: 0.7em;
   position: absolute;
   top: 70%;
-  margin-left: 0.5em;
+  margin-left: 1.7em;
 }
 .p-inputtext{
   background-color: #ffffff;
@@ -95,12 +95,16 @@ export default {
   color: #333333;
   height: 2.5em;
   border-color: #D1D1D1;
+  padding: 1em;
 }
 .p-inputtext:focus {
   border-color: #4A79F7 !important;
 }
 .input-container:focus-within label {
   color: #4A79F7;
+}
+.input-container label {
+  margin-left: 0.7em;
 }
 .p-button{
   background-color: #4A79F7;
@@ -117,12 +121,12 @@ export default {
 a {
   font-weight: bold;
   color: #4A79F7;
-  text-decoration: none;
+  text-decoration: underline;
   cursor: pointer;
 }
 
 a:hover {
-  color: #4A79F7;
-  text-decoration: underline;
+  color: #6c94ff;
+  text-decoration: none;
 }
 </style>
