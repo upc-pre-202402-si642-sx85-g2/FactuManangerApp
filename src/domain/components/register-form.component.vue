@@ -1,32 +1,68 @@
-<script >
+<script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 export default {
   setup() {
     const router = useRouter()
+    const name = ref('')
+    const dni = ref('')
+    const birthdate = ref('')
     const email = ref('')
     const password = ref('')
+    const nameError = ref(false)
+    const dniError = ref(false)
+    const birthdateError = ref(false)
     const emailError = ref(false)
     const passwordError = ref(false)
 
     const checkInputs = (input) => {
-      if (input === 'email') {
+      if (input === 'name') {
+        nameError.value = name.value === ''
+      } else if (input === 'dni') {
+        dniError.value = dni.value === ''
+      } else if (input === 'birthdate') {
+        birthdateError.value = birthdate.value === ''
+      } else if (input === 'email') {
         emailError.value = email.value === ''
       } else if (input === 'password') {
         passwordError.value = password.value === ''
       }
     }
 
-    return { email, password, emailError, passwordError, checkInputs, router }
+    return { name, dni, birthdate, email, password, nameError, dniError, birthdateError, emailError, passwordError, checkInputs, router }
   }
 }
 </script>
 
 <template>
   <form class="login-form">
-    <h2 class="title-form">LOGIN</h2>
+    <h2 class="title-form">REGISTRO</h2>
     <div class="inputs-login">
+      <div class="input-container">
+        <pv-floatLabel>
+          <pv-inputText id="name" v-model="name" @blur="() => checkInputs('name')" />
+          <label for="name">Nombre</label>
+        </pv-floatLabel>
+        <p v-if="nameError" class="error">Este campo es requerido*</p>
+      </div>
+
+      <div class="input-container">
+        <pv-floatLabel>
+          <pv-inputText id="dni" v-model="dni" @blur="() => checkInputs('dni')" />
+          <label for="dni">DNI</label>
+        </pv-floatLabel>
+        <p v-if="dniError" class="error">Este campo es requerido*</p>
+      </div>
+
+      <div class="input-container">
+        <pv-floatLabel>
+          <pv-inputText id="birthdate" v-model="birthdate" @blur="() => checkInputs('birthdate')" />
+          <label for="birthdate">Fecha de nacimiento</label>
+        </pv-floatLabel>
+        <p v-if="birthdateError" class="error">Este campo es requerido*</p>
+      </div>
+
       <div class="input-container">
         <pv-floatLabel>
           <pv-inputText id="email" v-model="email" @blur="() => checkInputs('email')" />
@@ -43,10 +79,9 @@ export default {
         <p v-if="passwordError" class="error">Este campo es requerido*</p>
       </div>
     </div>
-    <pv-button>Iniciar Sesión</pv-button>
+    <pv-button>Registrarme</pv-button>
     <div class="links">
-      <a @click="router.push('/forget-password')">¿Olvidaste tu contraseña?</a>
-      <a @click="router.push('/register')">Crear Cuenta</a>
+      <a @click="router.push('/login')">Ya tengo una cuenta</a>
     </div>
   </form>
 </template>

@@ -7,25 +7,29 @@ export default {
     const router = useRouter()
     const email = ref('')
     const password = ref('')
+    const repeatpassword = ref('')
     const emailError = ref(false)
     const passwordError = ref(false)
+    const repeatpasswordError = ref(false)
 
     const checkInputs = (input) => {
       if (input === 'email') {
         emailError.value = email.value === ''
       } else if (input === 'password') {
         passwordError.value = password.value === ''
+      } else if (input === 'repeatpassword') {
+        repeatpasswordError.value = repeatpassword.value === ''
       }
     }
 
-    return { email, password, emailError, passwordError, checkInputs, router }
+    return { email, password,repeatpassword, emailError, passwordError,repeatpasswordError, checkInputs, router }
   }
 }
 </script>
 
 <template>
   <form class="login-form">
-    <h2 class="title-form">LOGIN</h2>
+    <h2 class="title-form">Actualizar Contraseña</h2>
     <div class="inputs-login">
       <div class="input-container">
         <pv-floatLabel>
@@ -42,10 +46,18 @@ export default {
         </pv-floatLabel>
         <p v-if="passwordError" class="error">Este campo es requerido*</p>
       </div>
+
+      <div class="input-container">
+        <pv-floatLabel>
+          <pv-inputText id="repeatpassword" v-model="repeatpassword" @blur="() => checkInputs('repeatpassword')" />
+          <label for="repeatpassword">Repita contraseña</label>
+        </pv-floatLabel>
+        <p v-if="repeatpasswordError" class="error">Este campo es requerido*</p>
+      </div>
     </div>
-    <pv-button>Iniciar Sesión</pv-button>
+    <pv-button>Actualizar</pv-button>
     <div class="links">
-      <a @click="router.push('/forget-password')">¿Olvidaste tu contraseña?</a>
+      <a @click="router.push('/login')">Iniciar Sesión</a>
       <a @click="router.push('/register')">Crear Cuenta</a>
     </div>
   </form>
