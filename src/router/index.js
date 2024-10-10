@@ -1,14 +1,12 @@
 import {createRouter, createWebHistory} from "vue-router";
-import TheHomeContent from "@/public/pages/the-home-content.component.vue";
-import PageNotFound from "@/public/pages/page-not-found.component.vue";
-import ExaminerPerformanceOverview from "@/nursing/pages/examiner-performance-overview.component.vue";
+import TheLoginContent from "@/public/pages/the-login-content.component.vue";
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        { path: '/login',    component: TheHomeContent},
+        { path: '/login',    component: TheLoginContent},
         { path: '/',        redirect: '/login'},
-        { path: '/register', component: ExaminerPerformanceOverview},
+        { path: '/register', component: TheRegisterContent},
         //{ path: '/forget-password',        },
         //{ path: '/home',        },
         //{ path: '/historial',        },
