@@ -4,6 +4,7 @@ import LoginRegisterAndForgetPassword from "../domain/pages/login-register-and-f
 const router = createRouter({
     history: createWebHistory(),
     routes: [
+
         { path: '/login', component: LoginRegisterAndForgetPassword},
         { path: '/', redirect: '/login'},
         { path: '/register', component: LoginRegisterAndForgetPassword},

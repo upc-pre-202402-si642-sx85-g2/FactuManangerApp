@@ -2,10 +2,9 @@ import PrimeVue from "primevue/config";
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
-
-import Aura from '@primevue/themes/aura';
-
 import router from "./router/index.js";
+import 'primeicons/primeicons.css'
+import Aura from '@primevue/themes/aura';
 import Button from "primevue/button";
 import InputText from 'primevue/inputtext';
 import FloatLabel from 'primevue/floatlabel';
