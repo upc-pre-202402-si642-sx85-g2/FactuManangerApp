@@ -101,7 +101,7 @@ export default {
   margin-left: 0.5em;
 }
 .p-inputtext{
-  background-color: #F7F5EF;
+  background-color: #ffffff;
   border-radius: 20px;
   width: 26em;
   color: #333333;
