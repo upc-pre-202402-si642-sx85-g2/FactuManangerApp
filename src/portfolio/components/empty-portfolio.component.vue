@@ -1,5 +1,5 @@
 <script>
-import sidebar from "../../public/sidebar.component.vue"; // Asegúrate de que la ruta esté bien
+import sidebar from "../../public/sidebar.component.vue";
 
 export default {
   name: "portfolio-list.component",

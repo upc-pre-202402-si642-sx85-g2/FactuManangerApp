@@ -9,7 +9,9 @@ import Button from "primevue/button";
 import InputText from 'primevue/inputtext';
 import FloatLabel from 'primevue/floatlabel';
 import Card from "primevue/card";
-
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import 'primeflex/themes/primeone-light.css'
 const app = createApp(App);
 
 app.
@@ -17,11 +19,13 @@ app.
     preset: Aura,
         options: {
         prefix: 'p',
-            darkModeSelector: 'system',
             cssLayer: false
-    }
+
+    },
 }})
     .use(router)
+    .component('pv-dataTable', DataTable)
+    .component('pv-column', Column)
     .component('pv-card', Card)
     .component('pv-button', Button)
     .component('pv-floatLabel', FloatLabel)
