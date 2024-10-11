@@ -22,7 +22,7 @@ const currentForm = computed(() => {
 
 <template>
   <div class="principal-view">
-    <img src="../../assets/bg-login-register-and-forget-password.png" alt="img-bg">
+    <img class="bg-principal" src="../../assets/bg-login-register-and-forget-password.png" alt="img-bg">
     <div class="form-view">
       <img src="../../assets/ic-factuManager.png">
       <component :is="currentForm"></component>
@@ -37,9 +37,14 @@ const currentForm = computed(() => {
   align-items: center;
   width: 100%;
   max-height: 100vh;
-  img{
+  .bg-principal{
     width: 50%;
     height: 100vh;
+  }
+}
+@media (max-width: 1023px) {
+  .principal-view .bg-principal {
+    display: none;
   }
 }
 .form-view{
@@ -53,6 +58,21 @@ const currentForm = computed(() => {
     height: 25%;
     object-fit: cover;
     mix-blend-mode: hard-light;
+  }
+}
+@media (max-width: 1023px) {
+  .form-view{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    img{
+      width: 25%;
+      height: 25%;
+      object-fit: cover;
+      mix-blend-mode: hard-light;
+    }
   }
 }
 login-form{
