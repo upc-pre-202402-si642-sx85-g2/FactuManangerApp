@@ -25,7 +25,7 @@ export default {
     <sidebar />
 
     <div class="content">
-      <div class="title">
+      <div class="titulo">
         <h1>Cartera de Letras</h1>
       </div>
 
@@ -45,6 +45,18 @@ export default {
 
 <style scoped>
 
+.p-datatable, .p-datatable-thead, .p-datatable-tbody, .p-datatable-tfoot, .p-datatable-table{
+  background-color: white !important;
+}
+.p-datatable-header-cell{
+  background-color: white !important;
+}
+
+.p-datatable-table-thead > tr{
+  --p-datatable-header-cell-background:white;
+}
+
+
 .container {
   display: flex;
   height: 100vh;
@@ -56,7 +68,7 @@ export default {
   margin-left: 320px;
 }
 
-.title {
+.titulo {
   color: #435a97;
   padding-top: 90px;
   font-family: 'Open Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
