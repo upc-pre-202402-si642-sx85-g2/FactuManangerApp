@@ -45,7 +45,10 @@ export default {
 
 <style scoped>
 
-.p-datatable-table{
+.p-datatable, .p-datatable-thead, .p-datatable-tbody, .p-datatable-tfoot, .p-datatable-table{
+  background-color: white !important;
+}
+.p-datatable-header-cell{
   background-color: white !important;
 }
 
