@@ -8,6 +8,7 @@ import Aura from '@primevue/themes/aura';
 import Button from "primevue/button";
 import InputText from 'primevue/inputtext';
 import FloatLabel from 'primevue/floatlabel';
+import Card from "primevue/card";
 
 const app = createApp(App);
 
@@ -21,6 +22,7 @@ app.
     }
 }})
     .use(router)
+    .component('pv-card', Card)
     .component('pv-button', Button)
     .component('pv-floatLabel', FloatLabel)
     .component('pv-inputText', InputText)
