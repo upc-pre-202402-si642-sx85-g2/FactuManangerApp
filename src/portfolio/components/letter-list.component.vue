@@ -3,7 +3,7 @@ import sidebar from "../../public/sidebar.component.vue";
 
 export default {
   name:"letter-list",
-  components: { sidebar },
+  components: {sidebar },
  data(){
     return{
       letters: [
@@ -36,6 +36,13 @@ export default {
       </div>
 
       <div class="letterList">
+
+        <div class="button">
+          <pv-button>
+            Agregar letra
+          </pv-button>
+        </div>
+
 
         <pv-card class="card">
           <template #content>
@@ -87,13 +94,40 @@ export default {
   background-color: white;
   box-shadow: 0 5px 5px rgb(0,0,0,0.2);
   height: 70vh;
-  margin-top: 30px;
+  margin-top: 20px;
   width: 90%;
+}
+
+.button{
+  display: flex;
+  justify-content: right;
+  align-items: end;
+  width: 85%;
+  font-size: 25px;
+  margin-top:-20px;
+}
+
+.p-button{
+  background-color: #1f3c87;
+  color: white;
+  border-radius: 15px;
+  border-color: #1f3c87;
+  padding:10px;
+  width: 9em;
+  font-size: 20px;
+  font-family: "Onest",sans-serif;
+  box-shadow: 0 3px 3px rgb(0,0,0,0.2);
+}
+.p-button:hover{
+  background-color: #4877f3 !important;
+  color: white !important;
+  border-color: #4877f3 !important;
 }
 
 .letterList {
   align-items: center;
   display: flex;
+  flex-direction: column;
   justify-content: center;
 }
 
