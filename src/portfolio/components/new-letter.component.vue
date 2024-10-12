@@ -162,10 +162,6 @@ export default {
   background-color: #789cff !important;
 }
 
-:deep(.p-datepicker-day) {
-  font-family: "Onest", sans-serif !important;
-}
-
 .p-inputtext {
   color: black !important;
   font-family: Inter, Arial, sans-serif;
@@ -175,6 +171,12 @@ export default {
 .p-inputtext:hover {
   border-color: #4978f5 !important;
 }
+
+:deep(.p-datepicker-select-year){
+  font-family: 'Lato', sans-serif !important;
+}
+
+
 
 /* Media Queries */
 @media (max-width: 768px) {
