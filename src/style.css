@@ -26,6 +26,8 @@
   --p-datepicker-date-selected-color: #ffffff !important;
   --p-button-text-secondary-hover-background: #4978f5 !important;
   --p-datepicker-title-font-weight: 700 !important;
+  --p-floatlabel-active-color: #000 !important;
+  --p-floatlabel-active-font-size:1rem !important;
 }
 body{
   margin:0;
