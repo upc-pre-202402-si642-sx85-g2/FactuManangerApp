@@ -20,6 +20,7 @@ export default {
   },
   methods: {
     addLetter(letter) {
+      console.log('letra letra', letter);
       this.letters.push(letter);
       this.showModal = false;
     },

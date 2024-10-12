@@ -1,17 +1,18 @@
 <script>
-import sidebar from "../../public/sidebar.component.vue";
 import { ref } from 'vue';
+import sidebar from "../../public/sidebar.component.vue";
 
 export default {
   name: "new-letter",
   components: { sidebar },
-  setup() {
+  setup(_, { emit }) {
     const name = ref('');
     const issueDate = ref('');
     const expirationDate = ref('');
     const ruc = ref(undefined);
     const discountDate = ref('');
     const faceValue = ref(undefined);
+    const letters = ref([]);
 
     const nameError = ref(false);
     const issueDateError = ref(false);
@@ -20,15 +21,35 @@ export default {
     const discountDateError = ref(false);
     const faceValueError = ref(false);
 
-    const submitLetter = () => {
+    const validateForm = () => {
       nameError.value = name.value === '';
       issueDateError.value = issueDate.value === '';
-      expirationDateError.value =expirationDate.value <= issueDate.value;
+      expirationDateError.value = expirationDate.value <= issueDate.value;
       rucError.value = !(ruc.value && ruc.value.toString().length === 11);
       discountDateError.value = discountDate.value <= issueDate.value || discountDate.value > expirationDate.value;
-      faceValueError.value = faceValue.value === undefined || faceValue.value === '' || faceValue.value <= 0;
+      faceValueError.value = faceValue.value === '' || faceValue.value <= 0;
 
       return !(nameError.value || issueDateError.value || expirationDateError.value || rucError.value || discountDateError.value || faceValueError.value);
+    };
+
+    const submitLetterForm = () => {
+      if (validateForm()) {
+        const newLetter = {
+          letterNumber: LetterNumber(),
+          name: name.value,
+          issueDate: issueDate.value,
+          expirationDate: expirationDate.value,
+          ruc: ruc.value,
+          discountDate: discountDate.value,
+          faceValue: faceValue.value,
+        };
+        emit('submit', newLetter);
+      }
+    };
+
+    const LetterNumber = () => {
+      const lastLetter = letters.value[letters.value.length - 1];
+      return lastLetter ? (parseInt(lastLetter.nroLetra, 10) + 1).toString() : '1001'; // Si no hay letras, empieza en 1001
     };
 
     return {
@@ -44,23 +65,8 @@ export default {
       rucError,
       discountDateError,
       faceValueError,
-      submitLetter,
+      submitLetterForm,
     };
-  },
-  methods: {
-    submitLetterForm() {
-      if (this.submitLetter()) {
-        const newLetter = {
-          name: this.name,
-          issueDate: this.issueDate,
-          expirationDate: this.expirationDate,
-          ruc: this.ruc,
-          discountDate: this.discountDate,
-          faceValue: this.faceValue,
-        };
-        this.$emit('submit', newLetter);
-      }
-    },
   },
 };
 </script>
