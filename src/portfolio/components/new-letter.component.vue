@@ -33,42 +33,40 @@ export default {
       <template #content>
         <div class="card-content">
 
-            <div class="left-content">
-              <div class="input">
-                <!--add limit of characters-->
-                <label for="name">Nombre/Razón Social</label>
-                <pv-inputText id="name" v-model="name" />
-              </div>
-
-              <div class="input">
-                <label for="issueDate"> Fecha de emisión </label>
-                <pv-datePicker v-model="issueDate" showIcon fluid iconDisplay="input" inputId="icondisplay" />
-              </div>
-
-              <div class="input">
-                <label for="expirationDate"> Fecha de vencimiento </label>
-                <pv-datePicker v-model="expirationDate" showIcon fluid iconDisplay="input" inputId="icondisplay" />
-              </div>
+          <div class="right-content">
+            <div class="input input-name">
+              <!--add limit of characters-->
+              <label for="name">Nombre/Razón Social</label>
+              <pv-inputText id="name" v-model="name" />
             </div>
 
+            <div class="input">
+              <label for="issueDate"> Fecha de emisión </label>
+              <pv-datePicker v-model="issueDate" showIcon fluid iconDisplay="input" inputId="icondisplay" />
+            </div>
 
-            <div class="right-content">
-              <div class="input">
-                <!--add limit of characters-->
-                <label for="ruc" > Ruc </label>
-                <pv-inputNumber v-model="ruc" inputId="ruc" :useGrouping="false" fluid />
-              </div>
+            <div class="input">
+              <label for="expirationDate"> Fecha de vencimiento </label>
+              <pv-datePicker v-model="expirationDate" showIcon fluid iconDisplay="input" inputId="icondisplay" />
+            </div>
+          </div>
 
-              <div class="input">
-                <label for="discountDate"> Fecha de descuento </label>
-                <pv-datePicker v-model="discountDate" showIcon fluid iconDisplay="input" inputId="icondisplay" />
-              </div>
+          <div class="left-content">
+            <div class="input">
+              <!--add limit of characters-->
+              <label for="ruc" > Ruc </label>
+              <pv-inputNumber v-model="ruc" inputId="ruc" :useGrouping="false" fluid />
+            </div>
 
-              <div class="input">
-                <label for="faceValue"> Valor nominal </label>
-                <pv-inputNumber v-model="faceValue" inputId="faceValue" mode="currency" currency="PEN" locale="en-US" fluid />
-              </div>
+            <div class="input">
+              <label for="discountDate"> Fecha de descuento </label>
+              <pv-datePicker v-model="discountDate" showIcon fluid iconDisplay="input" inputId="icondisplay" />
+            </div>
 
+            <div class="input">
+              <label for="faceValue"> Valor nominal </label>
+              <pv-inputNumber v-model="faceValue" inputId="faceValue" fluid />
+            </div>
           </div>
 
         </div>
@@ -89,17 +87,6 @@ export default {
 </template>
 
 <style scoped>
-
-
-.title{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 45px;
-  margin-top: 10px;
-  color: #5b5b5b;
-}
-
 .modal-background {
   position: fixed;
   width: 100vw;
@@ -112,70 +99,92 @@ export default {
 
 .card {
   width: 65%;
-  height: 60vh;
   background-color: white;
-  box-shadow: 0 5px 5px rgb(0,0,0,0.2);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-.card-content{
+.title {
   display: flex;
-  color:black;
-  border:3px solid red;
-  padding: 10px;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  font-size: 45px;
+  margin: 10px 0 40px;
+  color: #5b5b5b;
+}
+
+.card-content {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 100%;
+  color: black;
   font-family: Inter, Arial, sans-serif;
   font-weight: bold;
+  margin: 0 auto;
 }
 
-.left-content{
-  border: 1px solid blue;
+.right-content, .left-content {
+  width: 40%;
+}
+
+.input {
+  margin-bottom: 40px;
+}
+
+.input-name {
   display: flex;
   flex-direction: column;
-  width: 50%;
 }
 
-.right-content{
-  border:1px solid green;
+.button {
   display: flex;
-  flex-direction: column;
-  width: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  font-size: 25px;
+  margin: 30px 0 20px;
 }
 
-.p-button{
+.p-button {
   background-color: #4A79F7;
   color: white;
   border-radius: 15px;
   border-color: #4A79F7;
-  width: 9em;
+  width: 10em;
+  padding: 12px;
   font-size: 18px;
-  font-family: "Onest",sans-serif;
+  font-family: "Onest", sans-serif;
 }
-.p-button:hover{
+
+.p-button:hover {
   background-color: #789cff !important;
-  color: white !important;
-  border-color: #789cff !important;
 }
 
-
-.input{
-  margin-bottom: 30px;
+:deep(.p-datepicker-day) {
+  font-family: "Onest", sans-serif !important;
 }
 
-:deep(.p-datepicker-day){
-  font-family: "Onest",sans-serif !important;
-}
-.p-inputtext{
+.p-inputtext {
   color: black !important;
   font-family: Inter, Arial, sans-serif;
   border-radius: 20px;
 }
 
-.p-inputtext:hover{
+.p-inputtext:hover {
   border-color: #4978f5 !important;
 }
 
+/* Media Queries */
+@media (max-width: 768px) {
+  .card-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .right-content, .left-content {
+    width: 80%;
+  }
+}
 </style>
