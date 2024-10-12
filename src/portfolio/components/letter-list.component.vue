@@ -13,6 +13,12 @@ export default {
         {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
         {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
         {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
+        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
+        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
+        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
+
+
+
       ]
     }
  }
@@ -29,34 +35,34 @@ export default {
         <h1>Cartera de Letras</h1>
       </div>
 
-      <div class="letter ">
-        <pv-dataTable :value="letters">
-          <pv-column field="nroLetra" header="Nro. Letra"></pv-column>
-          <pv-column field="razonSocial" header="Razón social"></pv-column>
-          <pv-column field="fechaEmision" header="Fecha de emisión"></pv-column>
-          <pv-column field="fechaVencimiento" header="Fecha de vencimiento"></pv-column>
-          <pv-column field="fechaDescuento" header="Fecha de descuento"></pv-column>
-          <pv-column field="valorNominal" header="Valor nominal"></pv-column>
-        </pv-dataTable>
+      <div class="letterList">
+
+        <pv-card class="card">
+          <template #content>
+
+            <div class="letter ">
+              <pv-dataTable :value="letters">
+                <pv-column field="nroLetra" header="Nro. Letra"></pv-column>
+                <pv-column field="razonSocial" header="Razón social"></pv-column>
+                <pv-column field="fechaEmision" header="Fecha de emisión"></pv-column>
+                <pv-column field="fechaVencimiento" header="Fecha de vencimiento"></pv-column>
+                <pv-column field="fechaDescuento" header="Fecha de descuento"></pv-column>
+                <pv-column field="valorNominal" header="Valor nominal"></pv-column>
+              </pv-dataTable>
+            </div>
+
+          </template>
+        </pv-card>
+
       </div>
     </div>
   </div>
+
+
+
 </template>
 
 <style scoped>
-
-.p-datatable, .p-datatable-thead, .p-datatable-tbody, .p-datatable-tfoot, .p-datatable-table{
-  background-color: white !important;
-}
-.p-datatable-header-cell{
-  background-color: white !important;
-}
-
-.p-datatable-table-thead > tr{
-  --p-datatable-header-cell-background:white;
-}
-
-
 .container {
   display: flex;
   height: 100vh;
@@ -64,22 +70,56 @@ export default {
 
 .content {
   flex: 1;
-  padding: 20px;
   margin-left: 320px;
+  padding: 20px;
 }
 
 .titulo {
   color: #435a97;
-  padding-top: 90px;
   font-family: 'Open Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
-  font-weight: bold;
   font-size: 20px;
+  font-weight: bold;
+  padding-top: 90px;
   text-align: center;
 }
 
-.letter{
-  display:flex;
-  justify-content:center;
+.card {
+  background-color: white;
+  box-shadow: 0 5px 5px rgb(0,0,0,0.2);
+  height: 70vh;
+  margin-top: 30px;
+  width: 90%;
+}
+
+.letterList {
   align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.letter {
+  font-size: 20px;
+  height: 65vh;
+  overflow-x: auto;
+  overflow-y: auto;
+  padding:10px;
+  width: 100%;
+}
+
+.p-datatable-tbody {
+  width: 100%;
+}
+
+.p-datatable-tbody > tr {
+  font-family: sans-serif !important;
+}
+
+:deep(.p-datatable-tbody > tr > td) {
+  font-family:"Onest",sans-serif !important;
+}
+
+:deep(.p-datatable-header-cell) {
+  font-size: x-large !important;
+  text-align: center !important;
 }
 </style>

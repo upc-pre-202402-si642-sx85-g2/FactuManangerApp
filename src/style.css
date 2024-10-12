@@ -1,15 +1,16 @@
 :root {
   font-family: 'Open Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
-  background-color: #F7F5EF;
-  --p-datatable-header-background: #F7F5EF !important;
-  --p-datatable-header-cell-background: #F7F5EF !important;
-  --p-datatable-row-background: #F7F5EF !important;
-  --p-datatable-header-cell-border-color: #F7F5EF !important;
-  --p-datatable-header-border-color: #F7F5EF !important;
+  background-color: #d7d7d7;
+  --p-datatable-header-background: #ffffff !important;
+  --p-datatable-header-cell-background: #ffffff !important;
+  --p-datatable-row-background: #ffffff !important;
+  --p-datatable-header-cell-border-color: #ffffff !important;
+  --p-datatable-header-border-color: #ffffff !important;
   --p-datatable-body-cell-border-color: #F7F5EF !important;
   --p-datatable-header-color: #000 !important;
-  --p-datatable-header-cell-color: #000 !important;
+  --p-datatable-header-cell-color: #4978f5 !important;
   --p-datatable-row-color: #000 !important;
+
 }
 body{
   margin:0;
