@@ -2,12 +2,13 @@ import {createRouter, createWebHistory} from "vue-router";
 import LoginRegisterAndForgetPassword from "../domain/pages/login-register-and-forget-password.component.vue";
 import portfolioListComponent from "../portfolio/components/empty-portfolio.component.vue";
 import letterListComponent from "../portfolio/components/letter-list.component.vue";
+import newLetterComponent from "../portfolio/components/new-letter.component.vue";
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
 
-        { path: '/login', component: letterListComponent},
+        { path: '/login', component: newLetterComponent},
         { path: '/', redirect: '/login'},
         { path: '/register', component: LoginRegisterAndForgetPassword},
         { path: '/forget-password', component: LoginRegisterAndForgetPassword},

@@ -12,6 +12,9 @@ import Card from "primevue/card";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import 'primeflex/themes/primeone-light.css'
+import InputNumber from "primevue/inputnumber";
+import DatePicker from "primevue/datepicker";
+
 const app = createApp(App);
 
 app.
@@ -30,4 +33,6 @@ app.
     .component('pv-button', Button)
     .component('pv-floatLabel', FloatLabel)
     .component('pv-inputText', InputText)
+    .component('pv-inputNumber', InputNumber)
+    .component('pv-datePicker', DatePicker)
     .mount('#app')

@@ -10,7 +10,15 @@
   --p-datatable-header-color: #000 !important;
   --p-datatable-header-cell-color: #4978f5 !important;
   --p-datatable-row-color: #000 !important;
-
+  --p-primary-color: #4978f5 !important;
+  --p-form-field-background: #ffffff !important;
+  --p-form-field-border-radius:20px !important;
+  --p-inputtext-color:#000 !important;
+  --p-datepicker-today-background: #4978f5 !important;
+  --p-datepicker-date-color: #000 !important;
+  --p-datepicker-select-month-color: #000 !important;
+  --p-datepicker-select-year-color: #000 !important;
+  --p-datepicker-week-day-color: #000 !important;
 }
 body{
   margin:0;
