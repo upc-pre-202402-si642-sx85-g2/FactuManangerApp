@@ -2,14 +2,13 @@
 import sidebar from "../../public/sidebar.component.vue";
 
 export default {
-  name: "portfolio-list.component",
+  name: "empty-portfolio",
   components: { sidebar }
 };
 </script>
 
 <template>
   <div class="container">
-    <sidebar />
 
     <div class="content">
       <div class="titulo">
@@ -23,9 +22,7 @@ export default {
             <div class="card-content">
               <img src="/src/assets/puerkito-puerkito.png" alt="">
               <p>No tienes ninguna letra</p>
-              <pv-button>
-                Agregar letra
-              </pv-button>
+              <pv-button @click="$emit('add-letter')"> Agregar letra</pv-button>
             </div>
           </template>
         </pv-card>
@@ -74,12 +71,13 @@ export default {
 }
 
 .card {
-  margin-top: 30px;
-  width: 90%;
-  height: 70vh;
   background-color: white;
   box-shadow: 0 5px 5px rgb(0,0,0,0.2);
+  height: 70vh;
+  margin-top: 20px;
+  width: 90%;
 }
+
 .card-content{
   display: flex;
   flex-direction: column;

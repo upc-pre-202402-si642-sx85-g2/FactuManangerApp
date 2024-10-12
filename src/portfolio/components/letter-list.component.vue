@@ -4,31 +4,31 @@ import sidebar from "../../public/sidebar.component.vue";
 export default {
   name:"letter-list",
   components: {sidebar },
- data(){
-    return{
-      letters: [
-        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
-        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
-        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
-        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
-        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
-        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
-        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
-        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
-        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
-
-
-
-      ]
-    }
- }
+  props:{
+    letters: Array,
+    required: true,
+  },
+ // data(){
+ //    return{
+ //      letters: [
+ //        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
+ //        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
+ //        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
+ //        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
+ //        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
+ //        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
+ //        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
+ //        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
+ //        {nroLetra: '1001', razonSocial: 'Gota a Gota', fechaEmision: '16/09/2024', fechaVencimiento: '20/11/2024', fechaDescuento: '26/09/2024', valorNominal:'1300.00'},
+ //      ]
+ //    }
+ // }
 }
 
 </script>
 
 <template>
   <div class="container">
-    <sidebar />
 
     <div class="content">
       <div class="titulo">
@@ -38,9 +38,7 @@ export default {
       <div class="letterList">
 
         <div class="button">
-          <pv-button>
-            Agregar letra
-          </pv-button>
+          <pv-button @click="$emit('add-letter')"> Agregar letra </pv-button>
         </div>
 
 
