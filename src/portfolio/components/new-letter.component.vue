@@ -49,7 +49,7 @@ export default {
 
     const LetterNumber = () => {
       const lastLetter = letters.value[letters.value.length - 1];
-      return lastLetter ? (parseInt(lastLetter.nroLetra, 10) + 1).toString() : '1001'; // Si no hay letras, empieza en 1001
+      return lastLetter ? (parseInt(lastLetter.letterNumber, 10) + 1).toString() : '1001';
     };
 
     return {
