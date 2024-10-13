@@ -1,35 +1,4 @@
 :root {
-  font-family: 'Open Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
-  background-color: #d7d7d7;
-  --p-datatable-header-background: #ffffff !important;
-  --p-datatable-header-cell-background: #ffffff !important;
-  --p-datatable-row-background: #ffffff !important;
-  --p-datatable-header-cell-border-color: #ffffff !important;
-  --p-datatable-header-border-color: #ffffff !important;
-  --p-datatable-body-cell-border-color: #F7F5EF !important;
-  --p-datatable-header-color: #000 !important;
-  --p-datatable-header-cell-color: #4978f5 !important;
-  --p-datatable-row-color: #000 !important;
-  --p-primary-color: #4978f5 !important;
-  --p-form-field-background: #ffffff !important;
-  --p-form-field-border-radius:20px !important;
-  --p-inputtext-color:#000 !important;
-  --p-datepicker-today-background: #4978f5 !important;
-  --p-datepicker-date-color: #000 !important;
-  --p-datepicker-select-month-color: #000 !important;
-  --p-datepicker-select-year-color: #000 !important;
-  --p-datepicker-week-day-color: #000 !important;
-  --p-datepicker-panel-background: #ffffff !important;
-  --p-datepicker-header-background: #ffffff !important;
-  --p-datepicker-header-color: #000 !important;
-  --p-datepicker-today-color: #001ba9 !important;
-  --p-datepicker-date-selected-color: #ffffff !important;
-  --p-button-text-secondary-hover-background: #4978f5 !important;
-  --p-datepicker-title-font-weight: 700 !important;
-  --p-floatlabel-active-color: #000 !important;
-  --p-floatlabel-active-font-size:1rem !important;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: #D9D9D9;
 }
-body{
-  margin:0;
-}
-
