@@ -1,19 +1,15 @@
 <script setup>
-
 </script>
 
 <template>
+  <main>
 
-  <span class="peña">
-    <img src="./assets/peña.png" alt="Manuel Peña">
-  </span>
-
+    <RouterView></RouterView>
+  </main>
 </template>
 
 <style>
-.peña{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+main{
+  width: 100%;
 }
 </style>
