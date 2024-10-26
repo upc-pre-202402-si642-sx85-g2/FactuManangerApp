@@ -9,8 +9,9 @@ export default {
     const tea = ref('');
     const desgravamen = ref('');
     const delivered = ref('');
-    const received= ref('');
+    const received = ref('');
     const selectedBank = ref(null);
+    const selectedLetters = ref([]);
 
     const banks = ref([
       { label: 'BCP', value: 'bcp' },
@@ -27,43 +28,33 @@ export default {
     const letters = ref([
       {
         letterNumber: '001',
-        issueDate: '2023/01/01',
-        expirationDate: '2023/06/01',
-        discountDate: '2023/05/01',
+        issueDate: '01/01/2023',
+        expirationDate: '01/06/2023',
+        discountDate: '01/05/2023',
         faceValue: 1000.00
       },
       {
         letterNumber: '002',
-        issueDate: '2023/02/01',
-        expirationDate: '2023/07/01',
-        discountDate: '2023/06/01',
+        issueDate: '01/02/2023',
+        expirationDate: '01/07/2023',
+        discountDate: '01/06/2023',
         faceValue: 2000.00
       },
       {
         letterNumber: '003',
-        issueDate: '2023/03/01',
-        expirationDate: '2023/08/01',
-        discountDate: '2023/07/01',
-        faceValue: 1500.00
-      },
-      {
-        letterNumber: '003',
-        issueDate: '2023/03/01',
-        expirationDate: '2023/08/01',
-        discountDate: '2023/07/01',
+        issueDate: '01/03/2023',
+        expirationDate: '01/08/2023',
+        discountDate: '01/07/2023',
         faceValue: 1500.00
       },
     ]);
-
-    const selectedLetters = ref([]);
 
     const formatCurrency = (value) => {
       return `S/. ${value.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     };
 
-
+    //watch para rastrear la selección del banco y actualizar las tasas de interés
     watch(selectedBank, (newBank) => {
-      console.log('Banco seleccionado:', newBank);
       if (newBank && bankRates[newBank.value]) {
         tea.value = bankRates[newBank.value].tea;
         desgravamen.value = bankRates[newBank.value].desgravamen;
@@ -73,6 +64,43 @@ export default {
       }
     });
 
+    //calculus 🤓
+    const calculatePeriodoDias = (fecha_vencimiento, fecha_descuento) => {
+      const diffTime = Math.abs(new Date(fecha_vencimiento) - new Date(fecha_descuento));
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    };
+
+    const calculateTEAForPeriod = (tasaEfectivaAnual, periodo_dias) => {
+      return Math.pow((1 + tasaEfectivaAnual), (periodo_dias / 360)) - 1;
+    };
+
+    const calculateTasaDescontada = (tea_for_period) => {
+      return tea_for_period / (1 + tea_for_period);
+    };
+
+    const calculateValorRecibido = (valor_nominal, tasa_descontada, desgravamen) => {
+      const vneto = valor_nominal * (1 - tasa_descontada);
+      return vneto - (desgravamen * valor_nominal);
+    };
+
+    const calculateValorEntregado = (valor_nominal) => {
+      return valor_nominal;
+    };
+
+    //watch para rastrear la selección de letras y actualizar los valores de entrega y recepción
+    watch(selectedLetters, (newLetters) => {
+      if (newLetters.length > 0) {
+        const selectedLetter = newLetters[0];
+        const periodoDias = calculatePeriodoDias(selectedLetter.expirationDate, selectedLetter.discountDate);
+        const teaForPeriod = calculateTEAForPeriod(tea.value / 100, periodoDias);
+        const tasaDescontada = calculateTasaDescontada(teaForPeriod);
+        received.value = calculateValorRecibido(selectedLetter.faceValue, tasaDescontada, desgravamen.value / 100);
+        delivered.value = calculateValorEntregado(selectedLetter.faceValue);
+      } else {
+        received.value = '';
+        delivered.value = '';
+      }
+    });
 
     return {
       tea,
@@ -83,12 +111,16 @@ export default {
       selectedBank,
       delivered,
       received,
-      formatCurrency
+      formatCurrency,
+      calculatePeriodoDias,
+      calculateTEAForPeriod,
+      calculateTasaDescontada,
+      calculateValorRecibido,
+      calculateValorEntregado
     };
   }
 };
 </script>
-
 <template>
   <div class="container">
     <sidebar></sidebar>
