@@ -1,6 +1,6 @@
 <script>
 import sidebar from "../../public/sidebar.component.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 export default {
   name: "operations",
@@ -10,12 +10,17 @@ export default {
     const desgravamen = ref('');
     const selectedBank = ref(null);
 
-    // Opciones para el cascadeSelect
     const banks = ref([
       { label: 'BCP', value: 'bcp' },
       { label: 'Interbank', value: 'interbank' },
       { label: 'Scotiabank', value: 'scotiabank' }
     ]);
+
+    const bankRates = {
+      bcp: { tea: 10, desgravamen: 0.2 },
+      interbank: { tea: 12, desgravamen: 0.25 },
+      scotiabank: { tea: 11, desgravamen: 0.15 },
+    };
 
     const letters = ref([
       {
@@ -45,7 +50,7 @@ export default {
         expirationDate: '2023/08/01',
         discountDate: '2023/07/01',
         faceValue: 1500.00
-      }
+      },
     ]);
 
     const selectedLetters = ref([]);
@@ -53,6 +58,19 @@ export default {
     const formatCurrency = (value) => {
       return `S/. ${value.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     };
+
+
+    watch(selectedBank, (newBank) => {
+      console.log('Banco seleccionado:', newBank);
+      if (newBank && bankRates[newBank.value]) {
+        tea.value = bankRates[newBank.value].tea;
+        desgravamen.value = bankRates[newBank.value].desgravamen;
+      } else {
+        tea.value = 0;
+        desgravamen.value = 0;
+      }
+    });
+
 
     return {
       tea,
@@ -105,7 +123,7 @@ export default {
                 <div class="disabled-inputs">
                   <div class="input">
                     <p>Banco</p>
-                    <pv-cascadeSelect/>
+                    <pv-select v-model="selectedBank" :options="banks" optionLabel="label" placeholder="Select a Bank" class="p-select" />
                   </div>
                   <div class="input">
                     <p>Tasa Efectiva Anual</p>
@@ -139,9 +157,13 @@ export default {
     </div>
   </div>
 </template>
-
 <style scoped>
-
+.p-select {
+  min-width: 220px;
+  width: auto;
+  font-family: "Onest", sans-serif;
+  font-weight: 200;
+}
 .subtitle {
   display: flex;
   align-self: start;

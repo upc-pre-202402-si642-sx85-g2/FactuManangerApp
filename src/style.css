@@ -31,6 +31,7 @@
   --p-inputtext-disabled-background: #f7f7f7 !important;
   --p-checkbox-checked-hover-background: #4978f5 !important;
   --p-checkbox-checked-hover-border-color: #ffffff !important;
+  --p-select-color: #000 !important;
 }
 body{
   margin:0;
