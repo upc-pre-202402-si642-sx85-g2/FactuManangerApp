@@ -146,21 +146,19 @@ export default {
   width: 100%;
 }
 
-.p-datatable-tbody {
-  width: 100%;
-}
-
 .p-datatable-tbody > tr {
   font-family: sans-serif !important;
 }
 
 :deep(.p-datatable-tbody > tr > td) {
   font-family: "Onest", sans-serif !important;
+  font-weight: 200;
   text-align: center !important;
 }
 
 :deep(.p-datatable-header-cell) {
-  font-size: x-large !important;
+  font-family: "Open Sans",serif;
+  font-size: 25px !important;
   text-align: center !important;
 }
 </style>
