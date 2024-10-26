@@ -8,6 +8,8 @@ export default {
   setup() {
     const tea = ref('');
     const desgravamen = ref('');
+    const delivered = ref('');
+    const received= ref('');
     const selectedBank = ref(null);
 
     const banks = ref([
@@ -79,6 +81,8 @@ export default {
       selectedLetters,
       banks,
       selectedBank,
+      delivered,
+      received,
       formatCurrency
     };
   }
@@ -137,11 +141,11 @@ export default {
                 <div class="values-input">
                   <div class="input">
                     <p>Valor Entregado</p>
-                    <pv-inputNumber v-model="tea" disabled />
+                    <pv-inputNumber v-model="delivered"  />
                   </div>
                   <div class="input">
                     <p>Valor Recibido</p>
-                    <pv-inputNumber v-model="tea" disabled />
+                    <pv-inputNumber v-model="received"  />
                   </div>
                 </div>
               </div>
