@@ -90,12 +90,19 @@ export default {
     //watch para rastrear la selección de letras y actualizar los valores de entrega y recepción
     watch(selectedLetters, (newLetters) => {
       if (newLetters.length > 0) {
-        const selectedLetter = newLetters[0];
-        const periodoDias = calculatePeriodoDias(selectedLetter.expirationDate, selectedLetter.discountDate);
-        const teaForPeriod = calculateTEAForPeriod(tea.value / 100, periodoDias);
-        const tasaDescontada = calculateTasaDescontada(teaForPeriod);
-        received.value = calculateValorRecibido(selectedLetter.faceValue, tasaDescontada, desgravamen.value / 100);
-        delivered.value = calculateValorEntregado(selectedLetter.faceValue);
+        let totalReceived = 0;
+        let totalDelivered = 0;
+
+        newLetters.forEach(letter => {
+          const periodoDias = calculatePeriodoDias(letter.expirationDate, letter.discountDate);
+          const teaForPeriod = calculateTEAForPeriod(tea.value / 100, periodoDias);
+          const tasaDescontada = calculateTasaDescontada(teaForPeriod);
+          totalReceived += calculateValorRecibido(letter.faceValue, tasaDescontada, desgravamen.value / 100);
+          totalDelivered += calculateValorEntregado(letter.faceValue);
+        });
+
+        received.value = totalReceived;
+        delivered.value = totalDelivered;
       } else {
         received.value = '';
         delivered.value = '';
