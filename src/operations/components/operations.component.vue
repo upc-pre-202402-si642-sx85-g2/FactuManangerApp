@@ -1,77 +1,140 @@
 <script>
 import sidebar from "../../public/sidebar.component.vue";
-import {ref} from "vue";
+import { ref } from "vue";
 
 export default {
   name: "operations",
   components: { sidebar },
-  setup(){
-    const tea= ref('');
-    const desgravamen= ref('');
+  setup() {
+    const tea = ref('');
+    const desgravamen = ref('');
+    const selectedBank = ref(null);
+
+    // Opciones para el cascadeSelect
+    const banks = ref([
+      { label: 'BCP', value: 'bcp' },
+      { label: 'Interbank', value: 'interbank' },
+      { label: 'Scotiabank', value: 'scotiabank' }
+    ]);
+
+    const letters = ref([
+      {
+        letterNumber: '001',
+        issueDate: '2023/01/01',
+        expirationDate: '2023/06/01',
+        discountDate: '2023/05/01',
+        faceValue: 1000.00
+      },
+      {
+        letterNumber: '002',
+        issueDate: '2023/02/01',
+        expirationDate: '2023/07/01',
+        discountDate: '2023/06/01',
+        faceValue: 2000.00
+      },
+      {
+        letterNumber: '003',
+        issueDate: '2023/03/01',
+        expirationDate: '2023/08/01',
+        discountDate: '2023/07/01',
+        faceValue: 1500.00
+      },
+      {
+        letterNumber: '003',
+        issueDate: '2023/03/01',
+        expirationDate: '2023/08/01',
+        discountDate: '2023/07/01',
+        faceValue: 1500.00
+      }
+    ]);
+
+    const selectedLetters = ref([]);
+
+    const formatCurrency = (value) => {
+      return `S/. ${value.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    };
 
     return {
       tea,
-      desgravamen
-    }
+      desgravamen,
+      letters,
+      selectedLetters,
+      banks,
+      selectedBank,
+      formatCurrency
+    };
   }
 };
 </script>
 
 <template>
   <div class="container">
-  <sidebar></sidebar>
+    <sidebar></sidebar>
     <div class="content">
-
       <div class="operations">
-
         <pv-card class="card">
-          <template #title >
+          <template #title>
             <h1 class="title">OPERACIONES</h1>
           </template>
           <template #content>
             <div class="card-content b1">
-            <p>Letras seleccionadas</p>
+              <div class="list">
+                <div class="subtitle">
+                  <p>Letras seleccionadas</p>
+                </div>
+                <pv-card class="letter-card">
+                  <template #content>
+                    <div class="letter">
+                      <pv-dataTable v-model:selection="selectedLetters" :value="letters">
+                        <pv-column field="letterNumber" header="Nro. Letra"></pv-column>
+                        <pv-column field="discountDate" header="Fecha de descuento"></pv-column>
+                        <pv-column field="expirationDate" header="Fecha de vencimiento"></pv-column>
+                        <pv-column field="faceValue" header="Valor nominal">
+                          <template #body="slotProps">
+                            <span>{{ formatCurrency(slotProps.data.faceValue) }}</span>
+                          </template>
+                        </pv-column>
+                        <pv-column selectionMode="multiple" headerStyle="width: 3rem; text-align: right;"></pv-column>
+                      </pv-dataTable>
+                    </div>
+                  </template>
+                </pv-card>
+              </div>
 
               <div class="input-container">
                 <div class="disabled-inputs">
                   <div class="input">
                     <p>Banco</p>
-                    <pv-cascadeSelect></pv-cascadeSelect>
+                    <pv-cascadeSelect/>
                   </div>
-
                   <div class="input">
                     <p>Tasa Efectiva Anual</p>
                     <pv-inputNumber v-model="tea" disabled />
                   </div>
-
                   <div class="input">
                     <p>Seguro Desgravamen</p>
-                    <pv-inputNumber v-model="tea" disabled />
+                    <pv-inputNumber v-model="desgravamen" disabled />
                   </div>
                 </div>
-
                 <div class="values-input">
                   <div class="input">
                     <p>Valor Entregado</p>
                     <pv-inputNumber v-model="tea" disabled />
                   </div>
-
                   <div class="input">
                     <p>Valor Recibido</p>
                     <pv-inputNumber v-model="tea" disabled />
                   </div>
                 </div>
               </div>
-
-
             </div>
           </template>
-
           <template #footer>
-            <pv-button @click="$emit('add-letter')"> Agregar letra</pv-button>
+            <div class="button">
+              <pv-button @click="$emit('add-letter')">Vender letra</pv-button>
+            </div>
           </template>
         </pv-card>
-
       </div>
     </div>
   </div>
@@ -79,36 +142,93 @@ export default {
 
 <style scoped>
 
-.input-container{
+.subtitle {
+  display: flex;
+  align-self: start;
+  font-size: 25px;
+}
+
+
+.list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.letter-card {
+  display: flex;
+  align-items: center;
+  background-color: #f6f6f6;
+  box-shadow: 0 5px 5px rgb(0, 0, 0, 0.2);
+  width: 60vw;
+  height: 32vh;
+  margin: 10px 0 20px 0;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.p-datatable-tbody > tr {
+  font-family: sans-serif !important;
+}
+
+:deep(.p-datatable-tbody > tr > td) {
+  font-family: "Onest", sans-serif !important;
+  font-weight: 200;
+  text-align: center !important;
+}
+
+:deep(.p-datatable-header-cell) {
+  font-family: "Open Sans",serif;
+  font-size: 31px !important;
+  text-align: center !important;
+}
+
+.p-cascadeselect {
+  width: 220px !important;
+}
+
+.p-inputtext:disabled{
+  width: 220px !important;
+  height: 45px;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+}
+
+.input-container {
+  margin-top:20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border: orange 3px solid;
+  align-items: center;
+  width: 100%;
+
 }
-.values-input{
+
+.values-input {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+
+  width: 70%;
+}
+
+.disabled-inputs {
   display: flex;
   justify-content: space-around;
-  border:5px solid rgba(17, 174, 191, 0.66);
-}
-.disabled-inputs{
-  display:flex;
-  justify-content: space-between;
-  border:green 3px solid;
-}
-.disabled-inputs .input{
-  margin: 0 30px 50px 50px;
+
+  width: 100%;
 }
 
-.input{
-  border:blue 1px solid;
-}
-
-.b1{
-  border: red 1px solid;
-}
-.container {
+.disabled-inputs .input {
+  flex-wrap: wrap;
   display: flex;
-  height: 100vh;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin-bottom: 20px;
 }
 
 .content {
@@ -117,25 +237,25 @@ export default {
   margin-left: 320px;
 }
 
-.p-button{
+.p-button {
   background-color: #4A79F7;
   border-color: #4A79F7;
   color: white;
   border-radius: 15px;
-  width: 12em;
-  height: 2.5em;
+  width: 8em;
+  height: 2em;
   margin: 40px 50px;
   font-size: 25px;
 }
 
-.p-button:hover{
+.p-button:hover {
   background-color: #789cff !important;
   color: white !important;
   border-color: #789cff !important;
 }
 
 .title {
-  color: #435a97;
+  color: #5b5b5b;
   font-family: 'Open Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: bold;
   font-size: 40px;
@@ -143,30 +263,30 @@ export default {
 }
 
 .card {
-  display:flex;
+  display: flex;
   align-items: center;
   background-color: white;
-  box-shadow: 0 5px 5px rgb(0,0,0,0.2);
-  height: 70vh;
+  box-shadow: 0 5px 5px rgb(0, 0, 0, 0.2);
+  height: 82vh;
   margin-top: 20px;
   width: 90%;
 }
 
-.card-content{
+.card-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  color:black;
+  color: black;
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: bold;
   font-size: 20px;
 }
 
-.operations{
-  display:flex;
-  justify-content:center;
+.operations {
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 </style>

@@ -1,12 +1,14 @@
 import {createRouter, createWebHistory} from "vue-router";
 import LoginRegisterAndForgetPassword from "../domain/pages/login-register-and-forget-password.component.vue";
 import portfolioComponent from "../portfolio/pages/portfolio.component.vue";
+import modalComponent from "../operations/components/modal.component.vue";
+import operationsComponent from "../operations/components/operations.component.vue";
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
 
-        { path: '/login', component: LoginRegisterAndForgetPassword},
+        { path: '/login', component: operationsComponent},
         { path: '/', redirect: '/login'},
         { path: '/register', component: LoginRegisterAndForgetPassword},
         { path: '/forget-password', component: LoginRegisterAndForgetPassword},

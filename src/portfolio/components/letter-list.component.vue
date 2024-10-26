@@ -156,6 +156,7 @@ export default {
 
 :deep(.p-datatable-tbody > tr > td) {
   font-family: "Onest", sans-serif !important;
+  text-align: center !important;
 }
 
 :deep(.p-datatable-header-cell) {
