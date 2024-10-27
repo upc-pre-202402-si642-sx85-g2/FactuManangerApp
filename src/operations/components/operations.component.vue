@@ -89,7 +89,7 @@ export default {
 
     //watch para rastrear la selección de letras y actualizar los valores de entrega y recepción
     watch(selectedLetters, (newLetters) => {
-      if (newLetters.length > 0) {
+      if (newLetters.length > 0 && selectedBank.value) {
         let totalReceived = 0;
         let totalDelivered = 0;
 
