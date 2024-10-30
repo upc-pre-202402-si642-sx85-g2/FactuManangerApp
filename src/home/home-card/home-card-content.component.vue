@@ -51,51 +51,23 @@ export default {
     <div class="title">
       <h1 class="blue-text section-title">Bienvenido !!</h1>
     </div>
-    <!-- Sección Última Letra Vendida -->
+    <!-- Sección Cantidad de Letras y Valor Nominal -->
     <div class="section">
-      <h1 class="black-text section-title">Última Letra Vendida</h1>
-      <div v-if="lastSoldLetra" class="card">
-        <div class="card-content-grid-sold">
-          <div class="card-item">
-            <h2 class="blue-text no-wrap">Banco</h2>
-            <h2 class="black-text">{{ lastSoldLetra.bank }}</h2>
+      <div class="card-content-grid-sold">
+        <div class="card-item special-card">
+          <h2 class="black-text no-wrap">Cantidad de Letras</h2>
+          <div class="card">
+            <h2 class="black-text">{{ letras.length }}</h2>
           </div>
-          <div class="card-item">
-            <h2 class="blue-text no-wrap">Valor Nominal</h2>
-            <h2 class="black-text">{{ formatCurrency(lastSoldLetra.faceValue) }}</h2>
-          </div>
-          <div class="card-item">
-            <h2 class="blue-text no-wrap">TEA</h2>
-            <h2 class="black-text">{{ lastSoldLetra.tea }}%</h2>
-          </div>
-          <div class="card-item">
-            <h2 class="blue-text no-wrap">TCEA</h2>
-            <h2 class="black-text">{{ lastSoldLetra.tcea }}%</h2>
-          </div>
-          <div class="card-item">
-            <h2 class="blue-text no-wrap">Período en días</h2>
-            <h2 class="black-text">{{ lastSoldLetra.period }}</h2>
-          </div>
-          <div class="card-item">
-            <h2 class="blue-text no-wrap">TEP</h2>
-            <h2 class="black-text">{{ lastSoldLetra.tep }}%</h2>
-          </div>
-          <div class="card-item">
-            <h2 class="blue-text no-wrap">Tasa descontada</h2>
-            <h2 class="black-text">{{ lastSoldLetra.discountRate }}%</h2>
-          </div>
-          <div class="card-item">
-            <h2 class="blue-text no-wrap">Valor Entregado</h2>
-            <h2 class="black-text">{{ formatCurrency(lastSoldLetra.deliveredValue) }}</h2>
-          </div>
-          <div class="card-item">
-            <h2 class="blue-text no-wrap">Valor Recibido</h2>
-            <h2 class="black-text">{{ formatCurrency(lastSoldLetra.receivedValue) }}</h2>
+        </div>
+        <div class="card-item special-card">
+          <h2 class="black-text no-wrap">Valor Nominal</h2>
+          <div class="card">
+            <h2 class="black-text">{{ formatCurrency(letras.reduce((total, letra) => total + letra.faceValue, 0)) }}</h2>
           </div>
         </div>
       </div>
     </div>
-
     <!-- Sección Última Letra Agregada -->
     <div class="section">
       <h1 class="black-text section-title">Última Letra Agregada</h1>
@@ -126,6 +98,9 @@ export default {
             <h2 class="black-text">{{ formatCurrency(lastLetra.faceValue) }}</h2>
           </div>
         </div>
+      </div>
+      <div v-else class="card">
+        <h2 class="black-text">Actualmente no ha agregado ninguna Letra/Facturado</h2>
       </div>
     </div>
   </div>
@@ -171,10 +146,32 @@ export default {
   gap: 40px;
 }
 
+.special-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center; /* Center text within the card */
+}
+
+.special-card h2 {
+  margin: 15px 0;
+  font-size: 50px; /* Increase text size */
+}
+
 .card-content-grid-sold {
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  gap: 40px;
+  display: flex;
+  flex-wrap: wrap; /* Ensure responsiveness */
+  justify-content: center; /* Center the cards */
+  gap: 250px; /* Space between cards */
+  margin-left: 10rem;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .special-card {
+    width: 100%; /* Full width on small screens */
+  }
 }
 
 .card-item {
@@ -204,9 +201,6 @@ export default {
   .card-content-grid {
     grid-template-columns: repeat(4, 1fr); /* Ajustar a 4 columnas en pantallas medianas */
   }
-  .card-content-grid-sold {
-    grid-template-columns: repeat(4, 1fr); /* Ajustar a 4 columnas en pantallas medianas */
-  }
   .container {
     margin: 0 320px; /* Ajustar el margen para dejar espacio para el sidebar */
   }
@@ -214,9 +208,6 @@ export default {
 
 @media (max-width: 1430px) {
   .card-content-grid {
-    grid-template-columns: repeat(3, 1fr); /* Ajustar a 3 columnas en pantallas medianas */
-  }
-  .card-content-grid-sold {
     grid-template-columns: repeat(3, 1fr); /* Ajustar a 3 columnas en pantallas medianas */
   }
   .container {
@@ -228,9 +219,7 @@ export default {
   .card-content-grid {
     grid-template-columns: repeat(2, 1fr); /* Ajustar a 2 columnas en pantallas medianas */
   }
-  .card-content-grid-sold {
-    grid-template-columns: repeat(2, 1fr); /* Ajustar a 2 columnas en pantallas medianas */
-  }
+
   .container {
     margin: 0 320px; /* Ajustar el margen para dejar espacio para el sidebar */
   }
@@ -238,9 +227,6 @@ export default {
 
 @media (max-width: 1024px) {
   .card-content-grid {
-    grid-template-columns: repeat(2, 1fr); /* Ajustar a 2 columnas en pantallas pequeñas */
-  }
-  .card-content-grid-sold {
     grid-template-columns: repeat(2, 1fr); /* Ajustar a 2 columnas en pantallas pequeñas */
   }
   .container {
@@ -259,7 +245,8 @@ export default {
     grid-template-columns: 1fr; /* Ajustar a 1 columna en pantallas muy pequeñas */
   }
   .card-content-grid-sold {
-    grid-template-columns: 1fr; /* Ajustar a 1 columna en pantallas muy pequeñas */
+    grid-template-columns: 1fr; /* Ajustar a 2 columnas en pantallas pequeñas */
+    margin-left: auto;
   }
   .container {
     margin: 0 auto;
