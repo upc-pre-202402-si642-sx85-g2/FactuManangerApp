@@ -1,5 +1,5 @@
 <script>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 export default {
   name: 'modal-instructions',
@@ -7,64 +7,62 @@ export default {
     selectedLetters: {
       type: Array,
       required: true
+    },
+    modalType: {
+      type: String,
+      required: true
     }
   },
-  setup(props) {
-    const showModal = ref(false);
-    const modalType = ref('');
-
-    const sellLetters = () => {
-      modalType.value = props.selectedLetters.length > 0 ? 'success' : 'error';
-      showModal.value = true;
-    };
+  setup(props, { emit }) {
+    const showModal = ref(true);
 
     const closeModal = () => {
       showModal.value = false;
+      emit('close-modal');
     };
+
+    watch(() => props.modalType, () => {
+      showModal.value = true;
+    });
 
     return {
       showModal,
-      modalType,
-      sellLetters,
-      closeModal,
+      closeModal
     };
   }
 };
 </script>
 
 <template>
-  <div>
-    <div v-if="showModal" class="modal-background">
-      <pv-card class="card">
-        <template #content>
-          <div v-if="modalType === 'success'">
-            <div class="title">¡Operación exitosa!</div>
-            <div class="card-content">
-              <p>Se agregó una nueva venta de letra a tu registro :)</p>
-            </div>
+  <div v-if="showModal" class="modal-background">
+    <pv-card class="card">
+      <template #content>
+        <div v-if="modalType === 'success'">
+          <div class="title">¡Operación exitosa!</div>
+          <div class="card-content">
+            <p>Se agregó una nueva venta de letra a tu registro :)</p>
           </div>
-          <div v-if="modalType === 'error'">
-            <div class="title">Error</div>
-            <div class="card-content">
-              <p>Debes seleccionar una letra >:(</p>
-            </div>
+        </div>
+        <div v-if="modalType === 'error'">
+          <div class="title">Error</div>
+          <div class="card-content">
+            <p>Debes seleccionar una letra >:(</p>
           </div>
-        </template>
+        </div>
+      </template>
 
-        <template #footer>
-          <div class="button">
-            <pv-button
-                :class="modalType === 'success' ? 'button-success' : 'button-error'"
-                @click="closeModal">
-              Aceptar
-            </pv-button>
-          </div>
-        </template>
-      </pv-card>
-    </div>
+      <template #footer>
+        <div class="button">
+          <pv-button
+              :class="modalType === 'success' ? 'button-success' : 'button-error'"
+              @click="closeModal">
+            Aceptar
+          </pv-button>
+        </div>
+      </template>
+    </pv-card>
   </div>
 </template>
-
 
 <style scoped>
 .modal-background {
@@ -137,5 +135,4 @@ export default {
   border-color: #789cff !important;
   color: white !important;
 }
-
 </style>

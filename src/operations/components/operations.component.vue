@@ -130,7 +130,6 @@ export default {
 </script>
 <template>
   <div class="container">
-    <sidebar></sidebar>
     <div class="content">
       <div class="operations">
         <pv-card class="card">
@@ -192,7 +191,7 @@ export default {
           </template>
           <template #footer>
             <div class="button">
-              <pv-button @click="$emit('add-letter')">Vender letra</pv-button>
+              <pv-button @click="$emit('sell-letter', selectedLetters)">Vender letra</pv-button>
             </div>
           </template>
         </pv-card>
