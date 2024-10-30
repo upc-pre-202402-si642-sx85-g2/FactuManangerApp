@@ -1,17 +1,14 @@
 <script>
 import HomeCardContent from "../home-card/home-card-content.component.vue";
-import sidebar from "../../public/sidebar.component.vue";
 
 export default {
   name: "home-content",
-  components: {sidebar, HomeCardContent}
+  components: {HomeCardContent}
 }
 </script>
 
 <template>
   <div class="container">
-    <!--<sidebar></sidebar> cambiale de nombre oe-->
-    <sidebar></sidebar>
     <home-card-content></home-card-content>
   </div>
 </template>

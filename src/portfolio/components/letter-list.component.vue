@@ -1,9 +1,6 @@
 <script>
-import sidebar from "../../public/sidebar.component.vue";
-
 export default {
   name: "letter-list",
-  components: { sidebar },
   props: {
     letters: Array,
     required: true,

@@ -23,7 +23,7 @@ export default {
         </li>
         <li>
           <div class="option">
-            <router-link to="/home">
+            <router-link to="/portfolio">
               <i class="pi pi-book" style="font-size: 1.8rem"></i>
               Cartera
             </router-link>
@@ -31,7 +31,7 @@ export default {
         </li>
         <li>
           <div class="option">
-            <router-link to="/home">
+            <router-link to="/operations">
               <i class="pi pi-database" style="font-size: 1.8rem"></i>
               Operaciones
             </router-link>
@@ -39,7 +39,7 @@ export default {
         </li>
         <li>
           <div class="option">
-            <router-link to="/home">
+            <router-link to="/letter-registry">
               <i class="pi pi-cog" style="font-size: 1.8rem"></i>
               Registro
             </router-link>
@@ -47,7 +47,7 @@ export default {
         </li>
         <li>
           <div class="option">
-            <router-link to="/home">
+            <router-link to="/login">
               <i class="pi pi-sign-out" style="font-size: 1.8rem"></i>
               Salir
             </router-link>

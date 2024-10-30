@@ -1,7 +1,6 @@
 <script>
 import operations from '../components/operations.component.vue';
 import modalInstructions from '../components/modal.component.vue';
-import sidebar from "../../public/sidebar.component.vue";
 import { ref } from 'vue';
 
 export default {
@@ -9,7 +8,6 @@ export default {
   components: {
     operations,
     modalInstructions,
-    sidebar
   },
   setup() {
     const selectedLetters = ref([]);
@@ -37,7 +35,6 @@ export default {
 </script>
 
 <template>
-  <sidebar></sidebar>
   <operations v-model:selectedLetters="selectedLetters" @sell-letter="handleSellLetter"></operations>
   <modal-instructions :selected-letters="selectedLetters" v-if="showModal" :modal-type="modalType" @close-modal="showModal = false"></modal-instructions>
 </template>

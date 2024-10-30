@@ -2,12 +2,10 @@
 import emptyPortfolio from "../components/empty-portfolio.component.vue";
 import letterList from "../components/letter-list.component.vue";
 import newLetter from "../components/new-letter.component.vue";
-import sidebar from "../../public/sidebar.component.vue";
 
 export default {
   name: "Portfolio",
   components: {
-    sidebar,
     emptyPortfolio,
     letterList,
     newLetter,
@@ -33,8 +31,6 @@ export default {
 
 <template>
   <div class="portfolio-container">
-    <sidebar />
-
     <div class="content">
       <empty-portfolio v-if="letters.length === 0" @add-letter="openModal" />
       <letter-list v-else :letters="letters" @add-letter="openModal" />
