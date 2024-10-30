@@ -1,15 +1,13 @@
 <script>
 import sidebar from "../../public/sidebar.component.vue";
-import { ref, watch } from "vue";
+import { ref, computed, watch } from "vue";
 
 export default {
   name: "operations",
   components: { sidebar },
   setup() {
-    const tea = ref('');
-    const desgravamen = ref('');
-    const delivered = ref('');
-    const received = ref('');
+    const tea = ref(0);
+    const desgravamen = ref(0);
     const selectedBank = ref(null);
     const selectedLetters = ref([]);
 
@@ -53,7 +51,7 @@ export default {
       return `S/. ${value.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     };
 
-    //watch para rastrear la selección del banco y actualizar las tasas de interés
+    // watch para rastrear la selección del banco y actualizar las tasas de interés
     watch(selectedBank, (newBank) => {
       if (newBank && bankRates[newBank.value]) {
         tea.value = bankRates[newBank.value].tea;
@@ -64,7 +62,28 @@ export default {
       }
     });
 
-    //calculus 🤓
+    // computed para calcular el monto entregado
+    const delivered = computed(() => {
+      return selectedLetters.value.reduce((total, letter) => {
+        return total + calculateValorEntregado(letter.faceValue);
+      }, 0);
+    });
+
+    // computed para calcular el monto recibido
+    const received = computed(() => {
+      let totalReceived = 0;
+      if (selectedLetters.value.length > 0 && selectedBank.value) {
+        selectedLetters.value.forEach(letter => {
+          const periodoDias = calculatePeriodoDias(letter.expirationDate, letter.discountDate);
+          const teaForPeriod = calculateTEAForPeriod(tea.value / 100, periodoDias);
+          const tasaDescontada = calculateTasaDescontada(teaForPeriod);
+          totalReceived += calculateValorRecibido(letter.faceValue, tasaDescontada, desgravamen.value / 100);
+        });
+      }
+      return totalReceived;
+    });
+
+    // Calculus 🤓
     const calculatePeriodoDias = (fecha_vencimiento, fecha_descuento) => {
       const diffTime = Math.abs(new Date(fecha_vencimiento) - new Date(fecha_descuento));
       return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -87,28 +106,6 @@ export default {
       return valor_nominal;
     };
 
-    //watch para rastrear la selección de letras y actualizar los valores de entrega y recepción
-    watch(selectedLetters, (newLetters) => {
-      if (newLetters.length > 0 && selectedBank.value) {
-        let totalReceived = 0;
-        let totalDelivered = 0;
-
-        newLetters.forEach(letter => {
-          const periodoDias = calculatePeriodoDias(letter.expirationDate, letter.discountDate);
-          const teaForPeriod = calculateTEAForPeriod(tea.value / 100, periodoDias);
-          const tasaDescontada = calculateTasaDescontada(teaForPeriod);
-          totalReceived += calculateValorRecibido(letter.faceValue, tasaDescontada, desgravamen.value / 100);
-          totalDelivered += calculateValorEntregado(letter.faceValue);
-        });
-
-        received.value = totalReceived;
-        delivered.value = totalDelivered;
-      } else {
-        received.value = '';
-        delivered.value = '';
-      }
-    });
-
     return {
       tea,
       desgravamen,
@@ -128,6 +125,7 @@ export default {
   }
 };
 </script>
+
 <template>
   <div class="container">
     <div class="content">
@@ -179,11 +177,11 @@ export default {
                 <div class="values-input">
                   <div class="input">
                     <p>Valor Entregado</p>
-                    <pv-inputNumber v-model="delivered"  />
+                    <pv-inputNumber v-model="delivered" />
                   </div>
                   <div class="input">
                     <p>Valor Recibido</p>
-                    <pv-inputNumber v-model="received"  />
+                    <pv-inputNumber v-model="received" />
                   </div>
                 </div>
               </div>
@@ -199,6 +197,7 @@ export default {
     </div>
   </div>
 </template>
+
 <style scoped>
 .p-select {
   min-width: 220px;
@@ -211,15 +210,12 @@ export default {
   align-self: start;
   font-size: 25px;
 }
-
-
 .list {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-
 .letter-card {
   display: flex;
   align-items: center;
@@ -231,37 +227,30 @@ export default {
   overflow-x: auto;
   overflow-y: auto;
 }
-
 .p-datatable-tbody > tr {
   font-family: sans-serif !important;
 }
-
 :deep(.p-datatable-tbody > tr > td) {
   font-family: "Onest", sans-serif !important;
   font-weight: 200;
   text-align: center !important;
 }
-
 :deep(.p-datatable-header-cell) {
   font-family: "Open Sans",serif;
   font-size: 31px !important;
   text-align: center !important;
 }
-
 .p-cascadeselect {
   width: 220px !important;
 }
-
 .p-inputtext:disabled{
   width: 220px !important;
   height: 45px;
 }
-
 .button {
   display: flex;
   justify-content: center;
 }
-
 .input-container {
   margin-top:20px;
   display: flex;
@@ -269,24 +258,18 @@ export default {
   justify-content: center;
   align-items: center;
   width: 100%;
-
 }
-
 .values-input {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
-
   width: 70%;
 }
-
 .disabled-inputs {
   display: flex;
   justify-content: space-around;
-
   width: 100%;
 }
-
 .disabled-inputs .input {
   flex-wrap: wrap;
   display: flex;
@@ -294,13 +277,11 @@ export default {
   justify-content: space-evenly;
   margin-bottom: 20px;
 }
-
 .content {
   flex: 1;
   padding: 20px;
   margin-left: 320px;
 }
-
 .p-button {
   background-color: #4A79F7;
   border-color: #4A79F7;
@@ -311,13 +292,11 @@ export default {
   margin: 40px 50px;
   font-size: 25px;
 }
-
 .p-button:hover {
   background-color: #789cff !important;
   color: white !important;
   border-color: #789cff !important;
 }
-
 .title {
   color: #5b5b5b;
   font-family: 'Open Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -325,7 +304,6 @@ export default {
   font-size: 40px;
   text-align: center;
 }
-
 .card {
   display: flex;
   align-items: center;
@@ -335,7 +313,6 @@ export default {
   margin-top: 20px;
   width: 90%;
 }
-
 .card-content {
   display: flex;
   flex-direction: column;
@@ -347,7 +324,6 @@ export default {
   font-weight: bold;
   font-size: 20px;
 }
-
 .operations {
   display: flex;
   justify-content: center;
