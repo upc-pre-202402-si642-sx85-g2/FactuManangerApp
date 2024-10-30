@@ -38,17 +38,9 @@ export default {
 
 <template>
   <sidebar></sidebar>
-  <div class="operations-page">
-    <operations v-model:selectedLetters="selectedLetters" @sell-letter="handleSellLetter"></operations>
-    <modal-instructions :selected-letters="selectedLetters" v-if="showModal" :modal-type="modalType" @close-modal="showModal = false"></modal-instructions>
-  </div>
+  <operations v-model:selectedLetters="selectedLetters" @sell-letter="handleSellLetter"></operations>
+  <modal-instructions :selected-letters="selectedLetters" v-if="showModal" :modal-type="modalType" @close-modal="showModal = false"></modal-instructions>
 </template>
 
 <style scoped>
-.operations-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
 </style>

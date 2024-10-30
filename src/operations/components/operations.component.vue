@@ -310,7 +310,7 @@ export default {
   background-color: white;
   box-shadow: 0 5px 5px rgb(0, 0, 0, 0.2);
   height: 82vh;
-  margin-top: 20px;
+  margin-top: 60px;
   width: 90%;
 }
 .card-content {
