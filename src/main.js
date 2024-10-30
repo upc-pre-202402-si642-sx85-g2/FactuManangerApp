@@ -14,6 +14,9 @@ import Column from 'primevue/column';
 import 'primeflex/themes/primeone-light.css'
 import InputNumber from "primevue/inputnumber";
 import DatePicker from "primevue/datepicker";
+import Select from 'primevue/select';
+
+
 
 const app = createApp(App);
 
@@ -35,4 +38,6 @@ app.
     .component('pv-inputText', InputText)
     .component('pv-inputNumber', InputNumber)
     .component('pv-datePicker', DatePicker)
+    .component('pv-select', Select)
+
     .mount('#app')
