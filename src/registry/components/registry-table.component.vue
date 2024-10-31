@@ -1,0 +1,89 @@
+<script setup>
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  letters: {
+    type: Array,
+    required: true
+  }
+});
+
+function formatPercentage(value) {
+  return `${value.toFixed(2)}%`;
+}
+
+function formatCurrency(value) {
+  return new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(value);
+}
+</script>
+
+<template>
+  <div class="registry-table">
+    <pv-card class="card">
+      <template #content>
+        <div class="registry">
+          <pv-dataTable :value="letters">
+            <pv-column field="bank" header="Banco"></pv-column>
+            <pv-column field="nominalValue" header="Valor Nominal">
+              <template #body="slotProps">
+                <span>{{ formatCurrency(slotProps.data.nominalValue) }}</span>
+              </template>
+            </pv-column>
+            <pv-column field="tea" header="TEA">
+              <template #body="slotProps">
+                <span>{{ formatPercentage(slotProps.data.tea) }}</span>
+              </template>
+            </pv-column>
+            <pv-column field="tcea" header="TCEA">
+              <template #body="slotProps">
+                <span>{{ formatPercentage(slotProps.data.tcea) }}</span>
+              </template>
+            </pv-column>
+            <pv-column field="periodInDays" header="Periodo en días"></pv-column>
+            <pv-column field="tep" header="TEP">
+              <template #body="slotProps">
+                <span>{{ formatPercentage(slotProps.data.tep) }}</span>
+              </template>
+            </pv-column>
+            <pv-column field="discountedRate" header="Tasa descontada">
+              <template #body="slotProps">
+                <span>{{ formatPercentage(slotProps.data.discountedRate) }}</span>
+              </template>
+            </pv-column>
+            <pv-column field="deliveredValue" header="Valor Entregado">
+              <template #body="slotProps">
+                <span>{{ formatCurrency(slotProps.data.deliveredValue) }}</span>
+              </template>
+            </pv-column>
+            <pv-column field="receivedValue" header="Valor Recibido">
+              <template #body="slotProps">
+                <span>{{ formatCurrency(slotProps.data.receivedValue) }}</span>
+              </template>
+            </pv-column>
+          </pv-dataTable>
+        </div>
+      </template>
+    </pv-card>
+  </div>
+</template>
+
+<style scoped>
+.registry-table {
+  margin-top: 3em;
+  height: 70%;
+}
+.card {
+  height: 100%;
+}
+.pv-column {
+  text-align: center;
+}
+
+:deep(.p-datatable-tbody > tr > td) {
+  text-align: center;
+}
+
+:deep(.p-datatable-header-cell) {
+  text-align: center;
+}
+</style>
