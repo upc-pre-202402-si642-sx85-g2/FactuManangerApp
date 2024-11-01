@@ -10,7 +10,7 @@ export default {
     const desgravamen = ref(0);
     const selectedBank = ref(null);
     const selectedLetters = ref([]);
-
+    const selectedLetterIds = ref([]);
     const teaError = ref(false);
     const desgravamenError = ref(false);
 
@@ -29,6 +29,7 @@ export default {
 
     const letters = ref([
       {
+        id:'1',
         letterNumber: '001',
         issueDate: '01/01/2023',
         expirationDate: '01/06/2023',
@@ -36,6 +37,7 @@ export default {
         faceValue: 10000.00
       },
       {
+        id:'2',
         letterNumber: '002',
         issueDate: '01/02/2023',
         expirationDate: '01/07/2023',
@@ -43,6 +45,7 @@ export default {
         faceValue: 20000.00
       },
       {
+        id:'3',
         letterNumber: '003',
         issueDate: '01/03/2023',
         expirationDate: '01/08/2023',
@@ -144,9 +147,21 @@ export default {
       return valor_nominal;
     };
 
-    const isFormInvalid = computed(() => {
+    const isInvalid = computed(() => {
       return teaError.value || desgravamenError.value;
     });
+
+    // watch para actualizar los IDs seleccionados
+    watch(selectedLetters, (newSelection) => {
+      selectedLetterIds.value = newSelection.map(letter => letter.id);
+    }, { deep: true });
+
+    // evento para enviar los IDs seleccionados al backend
+    const sellLetters = () => {
+      if (!isInvalid.value) {
+        //TODO: enviar selectedLetterIds.value al backend
+      }
+    };
 
     return {
       tea,
@@ -163,9 +178,11 @@ export default {
       calculateTasaDescontada,
       calculateValorRecibido,
       calculateValorEntregado,
+      selectedLetterIds,
+      sellLetters,
       teaError,
       desgravamenError,
-      isFormInvalid
+      isInvalid
     };
   }
 };
@@ -237,7 +254,7 @@ export default {
           </template>
           <template #footer>
             <div class="button">
-              <pv-button :disabled="isFormInvalid" @click="$emit('sell-letter', selectedLetters)">Vender letra</pv-button>
+              <pv-button :disabled="isInvalid" @click="$emit('sellLetters', selectedLetters)">Vender letra</pv-button>
             </div>
           </template>
         </pv-card>

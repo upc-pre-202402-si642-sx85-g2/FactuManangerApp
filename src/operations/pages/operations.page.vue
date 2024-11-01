@@ -35,7 +35,7 @@ export default {
 </script>
 
 <template>
-  <operations v-model:selectedLetters="selectedLetters" @sell-letter="handleSellLetter"></operations>
+  <operations v-model:selectedLetters="selectedLetters" @sellLetters="handleSellLetter"></operations>
   <modal-instructions :selected-letters="selectedLetters" v-if="showModal" :modal-type="modalType" @close-modal="showModal = false"></modal-instructions>
 </template>
 
