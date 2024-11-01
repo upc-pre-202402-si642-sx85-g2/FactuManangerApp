@@ -19,9 +19,9 @@ export default {
     ]);
 
     const bankRates = {
-      bcp: { tea: 10, desgravamen: 0.2 },
-      interbank: { tea: 12, desgravamen: 0.25 },
-      scotiabank: { tea: 11, desgravamen: 0.15 },
+      bcp: { teaMin: 8.9, teaMax: 87.5, desgravamen: 0.165 },
+      interbank: { teaMin: 4.5, teaMax: 44.92, desgravamen: 0.075 },
+      scotiabank: { teaMin: 19.9, teaMax: 65.99, desgravamen: 0.256 },
     };
 
     const letters = ref([
@@ -30,33 +30,56 @@ export default {
         issueDate: '01/01/2023',
         expirationDate: '01/06/2023',
         discountDate: '01/05/2023',
-        faceValue: 1000.00
+        faceValue: 10000.00
       },
       {
         letterNumber: '002',
         issueDate: '01/02/2023',
         expirationDate: '01/07/2023',
         discountDate: '01/06/2023',
-        faceValue: 2000.00
+        faceValue: 20000.00
       },
       {
         letterNumber: '003',
         issueDate: '01/03/2023',
         expirationDate: '01/08/2023',
         discountDate: '01/07/2023',
-        faceValue: 1500.00
+        faceValue: 15000.00
       },
     ]);
 
     const formatCurrency = (value) => {
-      return `S/. ${value.toLocaleString('es-PE', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      return `S/. ${value.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     };
+
+    // calcular la tea en proporción al monto de la letra
+    const calculateTEA = (amount, bank) => {
+      const minAmount = 1000;
+      const maxAmount = 100000;
+      const { teaMin, teaMax } = bankRates[bank];
+
+      if (amount <= minAmount) return teaMin;
+      if (amount >= maxAmount) return teaMax;
+
+      return teaMin + ((teaMax - teaMin) * (amount - minAmount) / (maxAmount - minAmount));
+    };
+
+    // actualizar la TEA cuando se seleccionan letras
+    const updateTEA = () => {
+      if (selectedBank.value && bankRates[selectedBank.value.value]) {
+        const totalAmount = selectedLetters.value.reduce((total, letter) => total + letter.faceValue, 0);
+        tea.value = calculateTEA(totalAmount, selectedBank.value.value);
+        desgravamen.value = bankRates[selectedBank.value.value].desgravamen;
+      }
+    };
+
+    // watch para rastrear la selección de letras y actualizar la TEA
+    watch(selectedLetters, updateTEA, { deep: true });
 
     // watch para rastrear la selección del banco y actualizar las tasas de interés
     watch(selectedBank, (newBank) => {
       if (newBank && bankRates[newBank.value]) {
-        tea.value = bankRates[newBank.value].tea;
-        desgravamen.value = bankRates[newBank.value].desgravamen;
+        updateTEA();
       } else if (newBank && newBank.value === 'custom') {
         tea.value = 0;
         desgravamen.value = 0;
@@ -129,7 +152,6 @@ export default {
   }
 };
 </script>
-
 <template>
   <div class="container">
     <div class="content">
