@@ -11,6 +11,9 @@ export default {
     const selectedBank = ref(null);
     const selectedLetters = ref([]);
 
+    const teaError = ref(false);
+    const desgravamenError = ref(false);
+
     const banks = ref([
       { label: 'BCP', value: 'bcp' },
       { label: 'Interbank', value: 'interbank' },
@@ -52,7 +55,8 @@ export default {
       return `S/. ${value.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     };
 
-    // calcular la tea en proporción al monto de la letra
+
+    // calcular la tea proporcionalmente al monto
     const calculateTEA = (amount, bank) => {
       const minAmount = 1000;
       const maxAmount = 100000;
@@ -64,16 +68,22 @@ export default {
       return teaMin + ((teaMax - teaMin) * (amount - minAmount) / (maxAmount - minAmount));
     };
 
-    // actualizar la TEA cuando se seleccionan letras
+    // watch para rastrear la selección de letras y actualizar la TEA
     const updateTEA = () => {
       if (selectedBank.value && bankRates[selectedBank.value.value]) {
         const totalAmount = selectedLetters.value.reduce((total, letter) => total + letter.faceValue, 0);
         tea.value = calculateTEA(totalAmount, selectedBank.value.value);
         desgravamen.value = bankRates[selectedBank.value.value].desgravamen;
+        teaError.value = false;
+        desgravamenError.value = false;
+      } else if (selectedBank.value && selectedBank.value.value === 'custom') {
+        teaError.value = tea.value < 3 || tea.value > 90;
+        desgravamenError.value = desgravamen.value < 0 || desgravamen.value > 1.5;
       }
     };
 
-    // watch para rastrear la selección de letras y actualizar la TEA
+    watch([tea, desgravamen], updateTEA);
+
     watch(selectedLetters, updateTEA, { deep: true });
 
     // watch para rastrear la selección del banco y actualizar las tasas de interés
@@ -110,6 +120,7 @@ export default {
       return totalReceived;
     });
 
+
     // Calculus 🤓
     const calculatePeriodoDias = (fecha_vencimiento, fecha_descuento) => {
       const diffTime = Math.abs(new Date(fecha_vencimiento) - new Date(fecha_descuento));
@@ -133,6 +144,10 @@ export default {
       return valor_nominal;
     };
 
+    const isFormInvalid = computed(() => {
+      return teaError.value || desgravamenError.value;
+    });
+
     return {
       tea,
       desgravamen,
@@ -147,11 +162,15 @@ export default {
       calculateTEAForPeriod,
       calculateTasaDescontada,
       calculateValorRecibido,
-      calculateValorEntregado
+      calculateValorEntregado,
+      teaError,
+      desgravamenError,
+      isFormInvalid
     };
   }
 };
 </script>
+
 <template>
   <div class="container">
     <div class="content">
@@ -194,11 +213,13 @@ export default {
                   </div>
                   <div class="input">
                     <p>Tasa Efectiva Anual</p>
-                    <pv-inputNumber v-model="tea" :disabled="selectedBank?.value !== 'custom'"/>
+                    <pv-inputNumber v-model="tea" :disabled="selectedBank?.value !== 'custom'" :mode="'decimal'" :minFractionDigits="2" :maxFractionDigits="2" :min="0"/>
+                    <div v-if="teaError" class="error">Los valores son entre 3 y 90*</div>
                   </div>
                   <div class="input">
                     <p>Seguro Desgravamen</p>
-                    <pv-inputNumber v-model="desgravamen" :disabled="selectedBank?.value !== 'custom'"/>
+                    <pv-inputNumber v-model="desgravamen" :disabled="selectedBank?.value !== 'custom'" :mode="'decimal'" :minFractionDigits="2" :maxFractionDigits="2" :min="0"/>
+                    <div v-if="desgravamenError" class="error">Los valores son entre 0 y 1.50*</div>
                   </div>
                 </div>
                 <div class="values-input">
@@ -216,7 +237,7 @@ export default {
           </template>
           <template #footer>
             <div class="button">
-              <pv-button @click="$emit('sell-letter', selectedLetters)">Vender letra</pv-button>
+              <pv-button :disabled="isFormInvalid" @click="$emit('sell-letter', selectedLetters)">Vender letra</pv-button>
             </div>
           </template>
         </pv-card>
@@ -226,6 +247,13 @@ export default {
 </template>
 
 <style scoped>
+.error {
+  color: red;
+  font-family: 'Lato', sans-serif;
+  font-weight: 800;
+  font-size: 0.8em;
+  margin: 5px 0 0 20px;
+}
 .p-select {
   min-width: 220px;
   width: auto;
