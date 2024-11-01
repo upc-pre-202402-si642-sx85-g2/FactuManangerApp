@@ -14,7 +14,8 @@ export default {
     const banks = ref([
       { label: 'BCP', value: 'bcp' },
       { label: 'Interbank', value: 'interbank' },
-      { label: 'Scotiabank', value: 'scotiabank' }
+      { label: 'Scotiabank', value: 'scotiabank' },
+      { label: 'Personalizado', value: 'custom' }
     ]);
 
     const bankRates = {
@@ -48,7 +49,7 @@ export default {
     ]);
 
     const formatCurrency = (value) => {
-      return `S/. ${value.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      return `S/. ${value.toLocaleString('es-PE', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
     };
 
     // watch para rastrear la selección del banco y actualizar las tasas de interés
@@ -56,6 +57,9 @@ export default {
       if (newBank && bankRates[newBank.value]) {
         tea.value = bankRates[newBank.value].tea;
         desgravamen.value = bankRates[newBank.value].desgravamen;
+      } else if (newBank && newBank.value === 'custom') {
+        tea.value = 0;
+        desgravamen.value = 0;
       } else {
         tea.value = 0;
         desgravamen.value = 0;
@@ -163,25 +167,26 @@ export default {
                 <div class="disabled-inputs">
                   <div class="input">
                     <p>Banco</p>
-                    <pv-select v-model="selectedBank" :options="banks" optionLabel="label" placeholder="Select a Bank" class="p-select" />
+                    <pv-select v-model="selectedBank" :options="banks" optionLabel="label" placeholder="Select a Bank"
+                               class="p-select"/>
                   </div>
                   <div class="input">
                     <p>Tasa Efectiva Anual</p>
-                    <pv-inputNumber v-model="tea" disabled />
+                    <pv-inputNumber v-model="tea" :disabled="selectedBank?.value !== 'custom'"/>
                   </div>
                   <div class="input">
                     <p>Seguro Desgravamen</p>
-                    <pv-inputNumber v-model="desgravamen" disabled />
+                    <pv-inputNumber v-model="desgravamen" :disabled="selectedBank?.value !== 'custom'"/>
                   </div>
                 </div>
                 <div class="values-input">
                   <div class="input">
                     <p>Valor Entregado</p>
-                    <pv-inputNumber v-model="delivered" />
+                    <pv-inputNumber v-model="delivered"/>
                   </div>
                   <div class="input">
                     <p>Valor Recibido</p>
-                    <pv-inputNumber v-model="received" />
+                    <pv-inputNumber v-model="received"/>
                   </div>
                 </div>
               </div>
@@ -205,17 +210,20 @@ export default {
   font-family: "Onest", sans-serif;
   font-weight: 200;
 }
+
 .subtitle {
   display: flex;
   align-self: start;
   font-size: 25px;
 }
+
 .list {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
+
 .letter-card {
   display: flex;
   align-items: center;
@@ -227,49 +235,59 @@ export default {
   overflow-x: auto;
   overflow-y: auto;
 }
+
 .p-datatable-tbody > tr {
   font-family: sans-serif !important;
 }
+
 :deep(.p-datatable-tbody > tr > td) {
   font-family: "Onest", sans-serif !important;
   font-weight: 200;
   text-align: center !important;
 }
+
 :deep(.p-datatable-header-cell) {
-  font-family: "Open Sans",serif;
+  font-family: "Open Sans", serif;
   font-size: 31px !important;
   text-align: center !important;
 }
+
 .p-cascadeselect {
   width: 220px !important;
 }
-.p-inputtext:disabled{
+
+.p-inputtext:disabled {
   width: 220px !important;
   height: 45px;
 }
+
 .button {
   display: flex;
   justify-content: center;
 }
+
 .input-container {
-  margin-top:20px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
 }
+
 .values-input {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
   width: 70%;
 }
+
 .disabled-inputs {
   display: flex;
   justify-content: space-around;
   width: 100%;
 }
+
 .disabled-inputs .input {
   flex-wrap: wrap;
   display: flex;
@@ -277,11 +295,13 @@ export default {
   justify-content: space-evenly;
   margin-bottom: 20px;
 }
+
 .content {
   flex: 1;
   padding: 20px;
   margin-left: 320px;
 }
+
 .p-button {
   background-color: #4A79F7;
   border-color: #4A79F7;
@@ -292,11 +312,13 @@ export default {
   margin: 40px 50px;
   font-size: 25px;
 }
+
 .p-button:hover {
   background-color: #789cff !important;
   color: white !important;
   border-color: #789cff !important;
 }
+
 .title {
   color: #5b5b5b;
   font-family: 'Open Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -304,6 +326,7 @@ export default {
   font-size: 40px;
   text-align: center;
 }
+
 .card {
   display: flex;
   align-items: center;
@@ -313,6 +336,7 @@ export default {
   margin-top: 60px;
   width: 90%;
 }
+
 .card-content {
   display: flex;
   flex-direction: column;
@@ -324,6 +348,7 @@ export default {
   font-weight: bold;
   font-size: 20px;
 }
+
 .operations {
   display: flex;
   justify-content: center;
