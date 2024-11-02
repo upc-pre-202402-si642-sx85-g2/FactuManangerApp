@@ -1,8 +1,9 @@
 // src/services/user.service.js
 import axios from 'axios';
+import { environment } from '../environment/environment.js';
 
 const http = axios.create({
-    baseURL: 'http://localhost:9000/api/v1'
+    baseURL: environment.baseUrl
 });
 
 export class UserService {
