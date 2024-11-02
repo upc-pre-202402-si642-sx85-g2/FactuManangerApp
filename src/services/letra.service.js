@@ -23,4 +23,15 @@ export class LetraService {
             }
         });
     }
+
+    async createLetra(letra) {
+        const token = sessionStorage.getItem('token');
+        return await http.post(`/create-letra`, letra, {
+            headers: {
+                Authorization: `${token}`
+            }
+        });
+    }
+
+
 }
