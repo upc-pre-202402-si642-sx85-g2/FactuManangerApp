@@ -125,9 +125,10 @@ export default {
 .container {
   width: 100%;
   max-width: 1200px;
-  margin: 0 23.5rem;
+  margin: 0 auto;
   padding: 20px;
   flex-direction: column;
+  margin-left: 300px;
 }
 
 .title {
@@ -138,13 +139,12 @@ export default {
 }
 
 .section {
-  margin-bottom: 60px; /* Espacio entre las secciones */
+  margin-bottom: 60px; /* Space between sections */
 }
 
 .section-title {
-  margin-bottom: 20px; /* Espacio entre el título y la tarjeta */
-  text-align: center; /* Centrar el título */
-  margin-left: 10rem;
+  margin-bottom: 20px; /* Space between title and card */
+  text-align: center; /* Center the title */
 }
 
 .card {
@@ -152,7 +152,7 @@ export default {
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   padding: 50px;
-  width: 120%;
+  width: 100%; /* Adjust width to 100% */
 }
 
 .card-content-grid {
@@ -178,12 +178,41 @@ export default {
   display: flex;
   flex-wrap: wrap; /* Ensure responsiveness */
   justify-content: center; /* Center the cards */
-  gap: 250px; /* Space between cards */
-  margin-left: 10rem;
-  margin-right: auto;
+  gap: 20px; /* Space between cards */
+}
+
+@media (max-width: 1700px) {
+  .card-content-grid-sold {
+    gap: 10px; /* Reduce gap between cards */
+  }
+  .special-card h2{
+    font-size: 30px;
+  }
+
+  .special-card {
+    width: 45%; /* Shrink the cards */
+  }
+}
+@media (max-width: 1500px) {
+  .container {
+    margin-left: auto;
+  }
+}
+@media (max-width: 1024px) {
+  .card-content-grid {
+    grid-template-columns: repeat(2, 1fr); /* Adjust to 2 columns on small screens */
+  }
+
+  .special-card {
+    width: 100%; /* Full width on small screens */
+  }
 }
 
 @media (max-width: 768px) {
+  .card-content-grid {
+    grid-template-columns: 1fr; /* Collapse to 1 column on very small screens */
+  }
+
   .special-card {
     width: 100%; /* Full width on small screens */
   }
@@ -210,66 +239,5 @@ export default {
 
 .no-wrap {
   white-space: nowrap;
-}
-
-@media (max-width: 1804px) {
-  .card-content-grid {
-    grid-template-columns: repeat(4, 1fr); /* Ajustar a 4 columnas en pantallas medianas */
-  }
-
-  .container {
-    margin: 0 320px; /* Ajustar el margen para dejar espacio para el sidebar */
-  }
-}
-
-@media (max-width: 1430px) {
-  .card-content-grid {
-    grid-template-columns: repeat(3, 1fr); /* Ajustar a 3 columnas en pantallas medianas */
-  }
-
-  .container {
-    margin: 0 320px; /* Ajustar el margen para dejar espacio para el sidebar */
-  }
-}
-
-@media (max-width: 1220px) {
-  .card-content-grid {
-    grid-template-columns: repeat(2, 1fr); /* Ajustar a 2 columnas en pantallas medianas */
-  }
-
-  .container {
-    margin: 0 320px; /* Ajustar el margen para dejar espacio para el sidebar */
-  }
-}
-
-@media (max-width: 1024px) {
-  .card-content-grid {
-    grid-template-columns: repeat(2, 1fr); /* Ajustar a 2 columnas en pantallas pequeñas */
-  }
-
-  .container {
-    margin: 0 auto;
-  }
-}
-
-@media (max-width: 1000px) {
-  .container {
-    display: none; /* Ocultar el contenido principal en pantallas pequeñas */
-  }
-}
-
-@media (max-width: 768px) {
-  .card-content-grid {
-    grid-template-columns: 1fr; /* Ajustar a 1 columna en pantallas muy pequeñas */
-  }
-
-  .card-content-grid-sold {
-    grid-template-columns: 1fr; /* Ajustar a 2 columnas en pantallas pequeñas */
-    margin-left: auto;
-  }
-
-  .container {
-    margin: 0 auto;
-  }
 }
 </style>
