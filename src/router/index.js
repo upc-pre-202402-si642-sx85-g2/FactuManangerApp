@@ -3,7 +3,7 @@ import LoginRegisterAndForgetPassword from "../domain/pages/login-register-and-f
 import operationsPage from "../operations/pages/operations.page.vue";
 import portfolioPage from "../portfolio/pages/portfolio.page.vue";
 import homeContentComponent from "../home/home-content/home-content.component.vue";
-
+import RegistryPage from "../registry/pages/registry.page.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -15,7 +15,7 @@ const router = createRouter({
         { path: '/home', component:homeContentComponent},
         {path: '/portfolio', component: portfolioPage},
         {path: '/operations', component: operationsPage},
-        {path:'/letter-registry', component: ''},
+        {path:'/letter-registry', component: RegistryPage},
         { path: '/:pathMatch(.*)', redirect: '/404' },
         //{ path: '/404', name: '404', component:  }
     ]
