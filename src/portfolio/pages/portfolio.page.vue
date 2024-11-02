@@ -16,6 +16,7 @@ export default {
       letters: [],
       showModal: false,
       letrasApiService: new LetraService(),
+      carteraId: null,
     };
   },
   async created() {
@@ -28,6 +29,7 @@ export default {
       // Fetch cartera
       const carteraResponse = await this.letrasApiService.getCarteraByUserId(userId);
       const cartera = carteraResponse.data[0];
+      this.carteraId = cartera._id;
 
       // Fetch letras
       const letrasResponse = await this.letrasApiService.getLetrasByCarteraId(cartera._id);
@@ -56,10 +58,9 @@ export default {
       <letter-list v-else :letters="letters" @add-letter="openModal"/>
     </div>
 
-    <new-letter v-if="showModal" class="new-letter-modal" @submit="addLetter"/>
+    <new-letter v-if="showModal" :carteraId="carteraId" class="new-letter-modal" @submit="addLetter"/>
   </div>
 </template>
-
 <style scoped>
 .portfolio-container {
   display: flex;
