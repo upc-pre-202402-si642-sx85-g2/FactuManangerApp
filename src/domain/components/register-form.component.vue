@@ -1,6 +1,7 @@
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { UserService } from '../../services/user.service.js'
 
 export default {
   setup() {
@@ -15,6 +16,7 @@ export default {
     const birthdateError = ref(false)
     const emailError = ref(false)
     const passwordError = ref(false)
+    const userService = new UserService()
 
     const checkInputs = (input) => {
       if (input === 'name') {
@@ -30,13 +32,36 @@ export default {
       }
     }
 
-    return { name, dni, birthdate, email, password, nameError, dniError, birthdateError, emailError, passwordError, checkInputs, router }
+    const handleRegister = async () => {
+      checkInputs('name')
+      checkInputs('dni')
+      checkInputs('birthdate')
+      checkInputs('email')
+      checkInputs('password')
+      if (!nameError.value && !dniError.value && !birthdateError.value && !emailError.value && !passwordError.value) {
+        try {
+          const user = {
+            nombre_completo: name.value,
+            dni: dni.value,
+            email: email.value,
+            password: password.value,
+            fecha_nacimiento: birthdate.value
+          }
+          await userService.createUser(user)
+          router.push('/login')
+        } catch (error) {
+          console.error('Error during registration:', error)
+        }
+      }
+    }
+
+    return { name, dni, birthdate, email, password, nameError, dniError, birthdateError, emailError, passwordError, checkInputs, handleRegister, router }
   }
 }
 </script>
 
 <template>
-  <form class="login-form">
+  <form class="login-form" @submit.prevent="handleRegister">
     <h2 class="title-form">REGISTRO</h2>
     <div class="inputs-login">
       <div class="input-container">
@@ -79,7 +104,7 @@ export default {
         <p v-if="passwordError" class="error">Este campo es requerido*</p>
       </div>
     </div>
-    <pv-button>Registrarme</pv-button>
+    <pv-button type="submit">Registrarme</pv-button>
     <div class="links">
       <a @click="router.push('/login')">Ya tengo una cuenta</a>
     </div>
