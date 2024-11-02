@@ -1,6 +1,7 @@
-<script >
+<script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { UserService } from '../../services/user.service.js'
 
 export default {
   setup() {
@@ -9,6 +10,7 @@ export default {
     const password = ref('')
     const emailError = ref(false)
     const passwordError = ref(false)
+    const userService = new UserService()
 
     const checkInputs = (input) => {
       if (input === 'email') {
@@ -18,13 +20,27 @@ export default {
       }
     }
 
-    return { email, password, emailError, passwordError, checkInputs, router }
+    const handleLogin = async () => {
+      checkInputs('email')
+      checkInputs('password')
+      if (!emailError.value && !passwordError.value) {
+        try {
+          const response = await userService.signIn(email.value, password.value)
+          sessionStorage.setItem('token', response.token) // Save token in session storage
+          sessionStorage.setItem('userId', response.userId)
+          router.push('/home')
+        } catch (error) {
+          console.error('Error during login:', error)
+        }
+      }
+    }
+
+    return { email, password, emailError, passwordError, checkInputs, handleLogin, router }
   }
 }
 </script>
-
 <template>
-  <form class="login-form">
+  <form class="login-form" @submit.prevent="handleLogin">
     <h2 class="title-form">LOGIN</h2>
     <div class="inputs-login">
       <div class="input-container">
@@ -43,7 +59,7 @@ export default {
         <p v-if="passwordError" class="error">Este campo es requerido*</p>
       </div>
     </div>
-    <pv-button>Iniciar Sesión</pv-button>
+    <pv-button type="submit">Iniciar Sesión</pv-button>
     <div class="links">
       <a @click="router.push('/forget-password')">¿Olvidaste tu contraseña?</a>
       <a @click="router.push('/register')">Crear Cuenta</a>
