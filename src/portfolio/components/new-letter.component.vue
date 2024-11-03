@@ -1,18 +1,25 @@
 <script>
 import { ref } from 'vue';
 import sidebar from "../../public/sidebar.component.vue";
+import { Letra } from "../../models/letra.entity.js";
+import { LetraService } from "../../services/letra.service.js";
 
 export default {
   name: "new-letter",
   components: { sidebar },
-  setup(_, { emit }) {
+  props: {
+    carteraId: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props, { emit }) {
     const name = ref('');
     const issueDate = ref('');
     const expirationDate = ref('');
     const ruc = ref(undefined);
     const discountDate = ref('');
     const faceValue = ref(undefined);
-    const letters = ref([]);
 
     const nameError = ref(false);
     const issueDateError = ref(false);
@@ -21,6 +28,9 @@ export default {
     const discountDateError = ref(false);
     const faceValueError = ref(false);
 
+    const letraService = new LetraService();
+
+    //validaciones
     const validateForm = () => {
       nameError.value = name.value === '';
       issueDateError.value = issueDate.value === '';
@@ -32,24 +42,39 @@ export default {
       return !(nameError.value || issueDateError.value || expirationDateError.value || rucError.value || discountDateError.value || faceValueError.value);
     };
 
-    const submitLetterForm = () => {
+    const submitLetterForm = async () => {
       if (validateForm()) {
-        const newLetter = {
-          letterNumber: LetterNumber(),
-          name: name.value,
-          issueDate: issueDate.value,
-          expirationDate: expirationDate.value,
-          ruc: ruc.value,
-          discountDate: discountDate.value,
-          faceValue: faceValue.value,
-        };
-        emit('submit', newLetter);
+        const newLetter = new Letra(
+            null,
+            props.carteraId,
+            name.value,
+            ruc.value,
+            formatDate(issueDate.value),
+            formatDate(discountDate.value),
+            formatDate(expirationDate.value),
+            faceValue.value,
+            new Date().toISOString(),
+            new Date().toISOString()
+        );
+
+        try {
+          const response = await letraService.createLetra(newLetter);
+          console.log('respuesta del backend:', response.data);
+          newLetter._id = response.data._id;
+          emit('submit', newLetter);
+        } catch (error) {
+          console.error('error al crear la letra:', error);
+        }
       }
     };
 
-    const LetterNumber = () => {
-      const lastLetter = letters.value[letters.value.length - 1];
-      return lastLetter ? (parseInt(lastLetter.letterNumber, 10) + 1).toString() : '1001';
+    //formateo de la fecha para el backend
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
     };
 
     return {
@@ -70,7 +95,6 @@ export default {
   },
 };
 </script>
-
 <template>
   <div class="modal-background">
     <pv-card class="card">

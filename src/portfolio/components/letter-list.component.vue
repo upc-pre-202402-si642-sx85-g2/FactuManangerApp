@@ -1,37 +1,65 @@
 <script>
+import { LetraService } from "../../services/letra.service.js";
+import { Letra } from "../../models/letra.entity.js";
+
 export default {
   name: "letter-list",
-  props: {
-    letters: Array,
-    required: true,
+  data() {
+    return {
+      letras: [],
+      letrasApiService: new LetraService(),
+      carteraId: null,
+    };
   },
-  computed: {
-    formattedLetters() {
-      return this.letters.map(letter => {
+  async created() {
+    try {
+      const userId = sessionStorage.getItem('userId');
+      if (!userId) {
+        throw new Error('User ID not found in session storage');
+      }
+
+      // Fetch cartera
+      const carteraResponse = await this.letrasApiService.getCarteraByUserId(userId);
+      const cartera = carteraResponse.data[0];
+      this.carteraId = cartera._id;
+
+      // Fetch letras
+      const letrasResponse = await this.letrasApiService.getLetrasByCarteraId(this.carteraId);
+      this.letras = letrasResponse.data.map((letra, index) => {
         return {
-          ...letter,
-          issueDate: this.formatDate(letter.issueDate),
-          expirationDate: this.formatDate(letter.expirationDate),
-          discountDate: this.formatDate(letter.discountDate),
+          ...letra,
+          orden: String(index + 1).padStart(3, '0'), //para que no aparezca el id de la letra, sino el orden en el que se creó
+          fecha_emision: this.formatDate(letra.fecha_emision),
+          fecha_descuento: this.formatDate(letra.fecha_descuento),
+          fecha_vencimiento: this.formatDate(letra.fecha_vencimiento),
+          createdAt: this.formatDate(letra.createdAt),
+          updateAt: this.formatDate(letra.updateAt)
         };
       });
-    },
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   },
   methods: {
-    // fechas formato DD/MM/YYYY
     formatDate(date) {
       const d = new Date(date);
       const day = String(d.getDate()).padStart(2, '0');
       const month = String(d.getMonth() + 1).padStart(2, '0');
-      const year = d.getFullYear(); // Año
-
+      const year = d.getFullYear();
       return `${day}/${month}/${year}`;
     },
-
-    // formato valor nominal
     formatCurrency(value) {
-      return `S/. ${value.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      return new Intl.NumberFormat('es-PE', {style: 'currency', currency: 'PEN'}).format(value);
     },
+    async deleteLetter(letraId) {
+      try {
+        console.log('letra eliminada:', letraId);
+        await this.letrasApiService.deleteLetra(letraId);
+        this.letras = this.letras.filter(letra => letra._id !== letraId);
+      } catch (error) {
+        console.error('error:', error);
+      }
+    }
   },
 };
 </script>
@@ -42,24 +70,27 @@ export default {
       <div class="titulo">
         <h1>Cartera de Letras</h1>
       </div>
-
       <div class="letterList">
         <div class="button">
-          <pv-button @click="$emit('add-letter')"> Agregar letra </pv-button>
+          <pv-button @click="$emit('add-letter')">Agregar letra</pv-button>
         </div>
-
         <pv-card class="card">
           <template #content>
             <div class="letter">
-              <pv-dataTable :value="formattedLetters">
-                <pv-column field="letterNumber" header="Nro. Letra"></pv-column>
-                <pv-column field="name" header="Razón social"></pv-column>
-                <pv-column field="issueDate" header="Fecha de emisión"></pv-column>
-                <pv-column field="expirationDate" header="Fecha de vencimiento"></pv-column>
-                <pv-column field="discountDate" header="Fecha de descuento"></pv-column>
+              <pv-dataTable :value="letras">
+                <pv-column field="orden" header="Nro. Letra"></pv-column>
+                <pv-column field="razon_social" header="Razón social"></pv-column>
+                <pv-column field="fecha_emision" header="Fecha de emisión"></pv-column>
+                <pv-column field="fecha_vencimiento" header="Fecha de vencimiento"></pv-column>
+                <pv-column field="fecha_descuento" header="Fecha de descuento"></pv-column>
                 <pv-column header="Valor nominal">
                   <template #body="slotProps">
-                    <span>{{ formatCurrency(slotProps.data.faceValue) }}</span>
+                    <span>{{ formatCurrency(slotProps.data.valor_nominal) }}</span>
+                  </template>
+                </pv-column>
+                <pv-column header="">
+                  <template #body="slotProps">
+                    <i class="pi pi-trash icon" @click="deleteLetter(slotProps.data._id)"></i>
                   </template>
                 </pv-column>
               </pv-dataTable>
@@ -72,6 +103,11 @@ export default {
 </template>
 
 <style scoped>
+.icon {
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
 .container {
   display: flex;
   height: 100vh;
@@ -97,7 +133,7 @@ export default {
   box-shadow: 0 5px 5px rgb(0, 0, 0, 0.2);
   height: 70vh;
   margin-top: 20px;
-  width: 90%;
+  width: 92%;
 }
 
 .button {
@@ -154,7 +190,7 @@ export default {
 }
 
 :deep(.p-datatable-header-cell) {
-  font-family: "Open Sans",serif;
+  font-family: "Open Sans", serif;
   font-size: 25px !important;
   text-align: center !important;
 }
