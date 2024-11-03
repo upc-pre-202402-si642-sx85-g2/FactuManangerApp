@@ -24,9 +24,18 @@ export class LetraService {
         });
     }
 
-    async createLetra(letra) {
+    async createLetra(letraId) {
         const token = sessionStorage.getItem('token');
-        return await http.post(`/create-letra`, letra, {
+        return await http.post(`/create-letra`, letraId, {
+            headers: {
+                Authorization: `${token}`
+            }
+        });
+    }
+
+    async deleteLetra(letraId) {
+        const token = sessionStorage.getItem('token');
+        return await http.delete(`/letra/${letraId}`, {
             headers: {
                 Authorization: `${token}`
             }
