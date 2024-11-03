@@ -1,7 +1,20 @@
+<template>
+  <div class="portfolio-container">
+    <div class="content">
+      <emptyPortfolio v-if="letters.length === 0" @add-letter="openModal"/>
+      <letter-list v-else :letters="letters" @add-letter="openModal"/>
+    </div>
+
+    <new-letter v-if="showModal" :carteraId="carteraId" @submit="addLetter"/>
+    <confirmation-modal v-if="showConfirmation" @close="showConfirmation = false" />
+  </div>
+</template>
+
 <script>
 import emptyPortfolio from "../components/empty-portfolio.component.vue";
 import letterList from "../components/letter-list.component.vue";
 import newLetter from "../components/new-letter.component.vue";
+import confirmationModal from "../components/confirmation-modal.component.vue";
 import { LetraService } from "../../services/letra.service.js";
 
 export default {
@@ -10,11 +23,13 @@ export default {
     emptyPortfolio,
     letterList,
     newLetter,
+    confirmationModal,
   },
   data() {
     return {
       letters: [],
       showModal: false,
+      showConfirmation: false,
       letrasApiService: new LetraService(),
       carteraId: null,
     };
@@ -40,9 +55,9 @@ export default {
   },
   methods: {
     addLetter(letter) {
-      console.log('letra letra', letter);
       this.letters.push(letter);
       this.showModal = false;
+      this.showConfirmation = true; // Muestra el modal de confirmación
     },
     openModal() {
       this.showModal = true;
@@ -51,16 +66,6 @@ export default {
 };
 </script>
 
-<template>
-  <div class="portfolio-container">
-    <div class="content">
-      <emptyPortfolio v-if="letters.length === 0" @add-letter="openModal"/>
-      <letter-list v-else :letters="letters" @add-letter="openModal"/>
-    </div>
-
-    <new-letter v-if="showModal" :carteraId="carteraId" class="new-letter-modal" @submit="addLetter"/>
-  </div>
-</template>
 <style scoped>
 .portfolio-container {
   display: flex;
