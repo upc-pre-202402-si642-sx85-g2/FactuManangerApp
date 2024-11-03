@@ -1,6 +1,7 @@
 <script>
 import sidebar from "../../public/sidebar.component.vue";
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
+import { LetraService } from "../../services/letra.service.js";
 
 export default {
   name: "operations",
@@ -13,6 +14,8 @@ export default {
     const selectedLetterIds = ref([]);
     const teaError = ref(false);
     const desgravamenError = ref(false);
+    const letrasApiService = new LetraService();
+    const letters = ref([]);
 
     const banks = ref([
       { label: 'BCP', value: 'bcp' },
@@ -27,39 +30,44 @@ export default {
       scotiabank: { teaMin: 19.9, teaMax: 65.99, desgravamen: 0.256 },
     };
 
-    const letters = ref([
-      {
-        id:'1',
-        letterNumber: '001',
-        issueDate: '01/01/2023',
-        expirationDate: '01/06/2023',
-        discountDate: '01/05/2023',
-        faceValue: 10000.00
-      },
-      {
-        id:'2',
-        letterNumber: '002',
-        issueDate: '01/02/2023',
-        expirationDate: '01/07/2023',
-        discountDate: '01/06/2023',
-        faceValue: 20000.00
-      },
-      {
-        id:'3',
-        letterNumber: '003',
-        issueDate: '01/03/2023',
-        expirationDate: '01/08/2023',
-        discountDate: '01/07/2023',
-        faceValue: 15000.00
-      },
-    ]);
-
     const formatCurrency = (value) => {
       return `S/. ${value.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     };
 
+    const fetchLetters = async () => {
+      try {
+        const userId = sessionStorage.getItem('userId');
+        if (!userId) {
+          throw new Error('User ID not found in session storage');
+        }
 
-    // calcular la tea proporcionalmente al monto
+        const carteraResponse = await letrasApiService.getCarteraByUserId(userId);
+        const carteraId = carteraResponse.data[0]._id;
+
+        const letrasResponse = await letrasApiService.getLetrasByCarteraId(carteraId);
+        letters.value = letrasResponse.data.map((letra, index) => ({
+          ...letra,
+          letterNumber: String(index + 1).padStart(3, '0'),
+          issueDate: formatDate(letra.fecha_emision),
+          expirationDate: formatDate(letra.fecha_vencimiento),
+          discountDate: formatDate(letra.fecha_descuento),
+          faceValue: letra.valor_nominal
+        }));
+      } catch (error) {
+        console.error('Error fetching letters:', error);
+      }
+    };
+
+    const formatDate = (date) => {
+      const d = new Date(date);
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}/${month}/${year}`;
+    };
+
+    onMounted(fetchLetters);
+
     const calculateTEA = (amount, bank) => {
       const minAmount = 1000;
       const maxAmount = 100000;
@@ -71,7 +79,6 @@ export default {
       return teaMin + ((teaMax - teaMin) * (amount - minAmount) / (maxAmount - minAmount));
     };
 
-    // watch para rastrear la selección de letras y actualizar la TEA
     const updateTEA = () => {
       if (selectedBank.value && bankRates[selectedBank.value.value]) {
         const totalAmount = selectedLetters.value.reduce((total, letter) => total + letter.faceValue, 0);
@@ -89,7 +96,6 @@ export default {
 
     watch(selectedLetters, updateTEA, { deep: true });
 
-    // watch para rastrear la selección del banco y actualizar las tasas de interés
     watch(selectedBank, (newBank) => {
       if (newBank && bankRates[newBank.value]) {
         updateTEA();
@@ -102,14 +108,12 @@ export default {
       }
     });
 
-    // computed para calcular el monto entregado
     const delivered = computed(() => {
       return selectedLetters.value.reduce((total, letter) => {
         return total + calculateValorEntregado(letter.faceValue);
       }, 0);
     });
 
-    // computed para calcular el monto recibido
     const received = computed(() => {
       let totalReceived = 0;
       if (selectedLetters.value.length > 0 && selectedBank.value) {
@@ -117,28 +121,65 @@ export default {
           const periodoDias = calculatePeriodoDias(letter.expirationDate, letter.discountDate);
           const teaForPeriod = calculateTEAForPeriod(tea.value / 100, periodoDias);
           const tasaDescontada = calculateTasaDescontada(teaForPeriod);
-          totalReceived += calculateValorRecibido(letter.faceValue, tasaDescontada, desgravamen.value / 100);
+          const valorRecibido = calculateValorRecibido(letter.faceValue, tasaDescontada, desgravamen.value / 100);
+          if (!isNaN(valorRecibido)) {
+            totalReceived += valorRecibido;
+          } else {
+            console.error('Invalid valorRecibido:', valorRecibido, {
+              faceValue: letter.faceValue,
+              teaForPeriod,
+              tasaDescontada,
+              desgravamen: desgravamen.value / 100
+            });
+          }
         });
       }
       return totalReceived;
     });
 
-
-    // Calculus 🤓
     const calculatePeriodoDias = (fecha_vencimiento, fecha_descuento) => {
-      const diffTime = Math.abs(new Date(fecha_vencimiento) - new Date(fecha_descuento));
+      const parseDate = (dateStr) => {
+        const [day, month, year] = dateStr.split('/').map(Number);
+        return new Date(year, month - 1, day);
+      };
+
+      const vencimiento = parseDate(fecha_vencimiento);
+      const descuento = parseDate(fecha_descuento);
+
+      if (isNaN(vencimiento) || isNaN(descuento)) {
+        console.error('Invalid dates:', { fecha_vencimiento, fecha_descuento });
+        return NaN;
+      }
+
+      const diffTime = Math.abs(vencimiento - descuento);
       return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     };
 
     const calculateTEAForPeriod = (tasaEfectivaAnual, periodo_dias) => {
-      return Math.pow((1 + tasaEfectivaAnual), (periodo_dias / 360)) - 1;
+      const result = Math.pow((1 + tasaEfectivaAnual), (periodo_dias / 360)) - 1;
+      if (isNaN(result)) {
+        console.error('Invalid TEA for period:', { tasaEfectivaAnual, periodo_dias });
+      }
+      return result;
     };
 
     const calculateTasaDescontada = (tea_for_period) => {
-      return tea_for_period / (1 + tea_for_period);
+      const result = tea_for_period / (1 + tea_for_period);
+      if (isNaN(result)) {
+        console.error('Invalid tasa descontada:', { tea_for_period });
+      }
+      return result;
     };
 
     const calculateValorRecibido = (valor_nominal, tasa_descontada, desgravamen) => {
+      if (typeof valor_nominal !== 'number' || typeof tasa_descontada !== 'number' || typeof desgravamen !== 'number') {
+        console.error('Invalid input values for calculateValorRecibido:', {
+          valor_nominal,
+          tasa_descontada,
+          desgravamen
+        });
+        return NaN;
+      }
       const vneto = valor_nominal * (1 - tasa_descontada);
       return vneto - (desgravamen * valor_nominal);
     };
@@ -151,12 +192,10 @@ export default {
       return teaError.value || desgravamenError.value;
     });
 
-    // watch para actualizar los IDs seleccionados
     watch(selectedLetters, (newSelection) => {
       selectedLetterIds.value = newSelection.map(letter => letter.id);
     }, { deep: true });
 
-    // evento para enviar los IDs seleccionados al backend
     const sellLetters = () => {
       if (!isInvalid.value) {
         //TODO: enviar selectedLetterIds.value al backend
@@ -187,7 +226,6 @@ export default {
   }
 };
 </script>
-
 <template>
   <div class="container">
     <div class="content">
