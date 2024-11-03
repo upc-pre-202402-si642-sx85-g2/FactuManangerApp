@@ -68,6 +68,7 @@ export default {
 
     onMounted(fetchLetters);
 
+    // calcular la tea proporcionalmente al monto
     const calculateTEA = (amount, bank) => {
       const minAmount = 1000;
       const maxAmount = 100000;
@@ -79,6 +80,7 @@ export default {
       return teaMin + ((teaMax - teaMin) * (amount - minAmount) / (maxAmount - minAmount));
     };
 
+    // watch para rastrear la selección de letras y actualizar la TEA
     const updateTEA = () => {
       if (selectedBank.value && bankRates[selectedBank.value.value]) {
         const totalAmount = selectedLetters.value.reduce((total, letter) => total + letter.faceValue, 0);
@@ -96,6 +98,7 @@ export default {
 
     watch(selectedLetters, updateTEA, { deep: true });
 
+    // watch para rastrear la selección del banco y actualizar las tasas de interés
     watch(selectedBank, (newBank) => {
       if (newBank && bankRates[newBank.value]) {
         updateTEA();
@@ -108,12 +111,14 @@ export default {
       }
     });
 
+    // computed para calcular el monto entregado
     const delivered = computed(() => {
       return selectedLetters.value.reduce((total, letter) => {
         return total + calculateValorEntregado(letter.faceValue);
       }, 0);
     });
 
+    // computed para calcular el monto recibido
     const received = computed(() => {
       let totalReceived = 0;
       if (selectedLetters.value.length > 0 && selectedBank.value) {
@@ -125,7 +130,7 @@ export default {
           if (!isNaN(valorRecibido)) {
             totalReceived += valorRecibido;
           } else {
-            console.error('Invalid valorRecibido:', valorRecibido, {
+            console.error('valores inválidos:', valorRecibido, {
               faceValue: letter.faceValue,
               teaForPeriod,
               tasaDescontada,
@@ -137,6 +142,8 @@ export default {
       return totalReceived;
     });
 
+
+    // Calculus 🤓
     const calculatePeriodoDias = (fecha_vencimiento, fecha_descuento) => {
       const parseDate = (dateStr) => {
         const [day, month, year] = dateStr.split('/').map(Number);
@@ -146,11 +153,6 @@ export default {
       const vencimiento = parseDate(fecha_vencimiento);
       const descuento = parseDate(fecha_descuento);
 
-      if (isNaN(vencimiento) || isNaN(descuento)) {
-        console.error('Invalid dates:', { fecha_vencimiento, fecha_descuento });
-        return NaN;
-      }
-
       const diffTime = Math.abs(vencimiento - descuento);
       return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     };
@@ -158,7 +160,7 @@ export default {
     const calculateTEAForPeriod = (tasaEfectivaAnual, periodo_dias) => {
       const result = Math.pow((1 + tasaEfectivaAnual), (periodo_dias / 360)) - 1;
       if (isNaN(result)) {
-        console.error('Invalid TEA for period:', { tasaEfectivaAnual, periodo_dias });
+        console.error('tea inválida:', { tasaEfectivaAnual, periodo_dias });
       }
       return result;
     };
@@ -166,14 +168,14 @@ export default {
     const calculateTasaDescontada = (tea_for_period) => {
       const result = tea_for_period / (1 + tea_for_period);
       if (isNaN(result)) {
-        console.error('Invalid tasa descontada:', { tea_for_period });
+        console.error('tasa descontada inválida:', { tea_for_period });
       }
       return result;
     };
 
     const calculateValorRecibido = (valor_nominal, tasa_descontada, desgravamen) => {
       if (typeof valor_nominal !== 'number' || typeof tasa_descontada !== 'number' || typeof desgravamen !== 'number') {
-        console.error('Invalid input values for calculateValorRecibido:', {
+        console.error('input para calcular:', {
           valor_nominal,
           tasa_descontada,
           desgravamen
