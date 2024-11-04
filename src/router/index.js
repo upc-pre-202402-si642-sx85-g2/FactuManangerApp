@@ -12,10 +12,12 @@ const router = createRouter({
         { path: '/', redirect: '/login'},
         { path: '/register', component: LoginRegisterAndForgetPassword},
         { path: '/forget-password', component: LoginRegisterAndForgetPassword},
+        { path: '/recovery-password', component: LoginRegisterAndForgetPassword},
         { path: '/home', component:homeContentComponent},
         {path: '/portfolio', component: portfolioPage},
         {path: '/operations', component: operationsPage},
         {path:'/letter-registry', component: RegistryPage},
+
         { path: '/:pathMatch(.*)', redirect: '/404' },
         //{ path: '/404', name: '404', component:  }
     ]

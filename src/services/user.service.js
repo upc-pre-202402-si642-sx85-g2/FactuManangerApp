@@ -16,4 +16,14 @@ export class UserService {
         const response = await http.post('/sign-in', { email, password });
         return response.data;
     }
+
+    async recoveryPassword(email) {
+        const response = await http.post('/recovery-password-reset', { email });
+        return response.data;
+    }
+
+    async resetPassword(token, newPassword) {
+        const response = await http.post('/reset-password', { token, newPassword });
+        return response.data;
+    }
 }

@@ -1,34 +1,40 @@
-<script >
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+<script>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { UserService } from '../../services/user.service.js';
 
 export default {
   setup() {
-    const router = useRouter()
-    const email = ref('')
-    const password = ref('')
-    const repeatpassword = ref('')
-    const emailError = ref(false)
-    const passwordError = ref(false)
-    const repeatpasswordError = ref(false)
+    const router = useRouter();
+    const email = ref('');
+    const emailError = ref(false);
+    const userService = new UserService();
 
     const checkInputs = (input) => {
       if (input === 'email') {
-        emailError.value = email.value === ''
-      } else if (input === 'password') {
-        passwordError.value = password.value === ''
-      } else if (input === 'repeatpassword') {
-        repeatpasswordError.value = repeatpassword.value === ''
+        emailError.value = email.value === '';
       }
-    }
+    };
 
-    return { email, password,repeatpassword, emailError, passwordError,repeatpasswordError, checkInputs, router }
+    const handleSubmit = async () => {
+      checkInputs('email');
+      if (!emailError.value) {
+        try {
+          await userService.recoveryPassword(email.value);
+          alert('Password recovery email sent successfully');
+        } catch (error) {
+          console.error('Error sending password recovery email:', error);
+        }
+      }
+    };
+
+    return { email, emailError, checkInputs, handleSubmit, router };
   }
-}
+};
 </script>
 
 <template>
-  <form class="login-form">
+  <form class="login-form" @submit.prevent="handleSubmit">
     <h2 class="title-form">Actualizar Contraseña</h2>
     <div class="inputs-login">
       <div class="input-container">
@@ -38,24 +44,8 @@ export default {
         </pv-floatLabel>
         <p v-if="emailError" class="error">Este campo es requerido*</p>
       </div>
-
-      <div class="input-container">
-        <pv-floatLabel>
-          <pv-inputText id="password" v-model="password" @blur="() => checkInputs('password')" />
-          <label for="password">Contraseña</label>
-        </pv-floatLabel>
-        <p v-if="passwordError" class="error">Este campo es requerido*</p>
-      </div>
-
-      <div class="input-container">
-        <pv-floatLabel>
-          <pv-inputText id="repeatpassword" v-model="repeatpassword" @blur="() => checkInputs('repeatpassword')" />
-          <label for="repeatpassword">Repita contraseña</label>
-        </pv-floatLabel>
-        <p v-if="repeatpasswordError" class="error">Este campo es requerido*</p>
-      </div>
     </div>
-    <pv-button>Actualizar</pv-button>
+    <pv-button type="submit">Enviar</pv-button>
     <div class="links">
       <a @click="router.push('/login')">Iniciar Sesión</a>
       <a @click="router.push('/register')">Crear Cuenta</a>

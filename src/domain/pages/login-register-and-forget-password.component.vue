@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import LoginForm from "../components/login-form.component.vue";
 import RegisterForm from "../components/register-form.component.vue";
 import ForgetPasswordForm from "../components/forget-password.component.vue";
+import RecoveryPasswordForm from "../components/recovery-password.component.vue";
 
 const route = useRoute()
 const currentForm = computed(() => {
@@ -14,6 +15,8 @@ const currentForm = computed(() => {
       return RegisterForm
     case '/forget-password':
       return ForgetPasswordForm
+    case '/recovery-password':
+      return RecoveryPasswordForm
     default:
       return null
   }

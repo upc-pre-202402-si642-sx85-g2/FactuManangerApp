@@ -11,7 +11,7 @@ export default {
     const route = useRoute();
 
     const showSidebar = computed(() => {
-      return !['/login', '/register', '/forget-password'].includes(route.path);
+      return !['/login', '/register', '/forget-password', '/recovery-password'].includes(route.path);
     });
 
     return {
