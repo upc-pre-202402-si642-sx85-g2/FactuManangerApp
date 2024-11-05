@@ -1,16 +1,29 @@
 <script>
 import EmptyRegistry from "../components/empty-registry.component.vue";
 import RegistryTable from "../components/registry-table.component.vue";
+import { OperationService } from "../../services/operation.service.js";
 
 export default {
   name: "registry",
   components: { RegistryTable, EmptyRegistry },
   data() {
     return {
-      letters: [
-
-      ]
+      letters: []
     };
+  },
+  mounted() {
+    this.fetchOperations();
+  },
+  methods: {
+    async fetchOperations() {
+      const operationService = new OperationService();
+      try {
+        const response = await operationService.getAllOperations();
+        this.letters = response.data;
+      } catch (error) {
+        console.error('Error fetching operations:', error);
+      }
+    }
   }
 };
 </script>
