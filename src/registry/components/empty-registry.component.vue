@@ -23,6 +23,11 @@
 .card {
   height: 100%;
   justify-content: space-around !important;
+  background-color: white;
+  color: black;
+  font-family: Inter, Arial, sans-serif;
+  padding: 20px;
+  box-shadow: 0 5px 5px rgb(0, 0, 0, 0.2);
 }
 
 :deep(.p-datatable-tbody > tr > td) {

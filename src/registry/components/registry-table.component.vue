@@ -74,6 +74,8 @@ function formatCurrency(value) {
 }
 .card {
   height: 100%;
+  background-color: white;
+  box-shadow: 0 5px 5px rgb(0, 0, 0, 0.2);
 }
 .pv-column {
   text-align: center;

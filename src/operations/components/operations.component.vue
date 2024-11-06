@@ -97,7 +97,7 @@ export default {
         desgravamenError.value = false;
       } else if (selectedBank.value && selectedBank.value.value === 'custom') {
         teaError.value = tea.value < 3 || tea.value > 90;
-        desgravamenError.value = desgravamen.value < 0 || desgravamen.value > 1.5;
+        desgravamenError.value = desgravamen.value < 0.01 || desgravamen.value > 1.5;
       }
     };
 
@@ -301,17 +301,17 @@ export default {
                   <div class="input">
                     <p>Seguro Desgravamen</p>
                     <pv-inputNumber v-model="desgravamen" :disabled="selectedBank?.value !== 'custom'" :mode="'decimal'" :minFractionDigits="2" :maxFractionDigits="2" :min="0"/>
-                    <div v-if="desgravamenError" class="error">Los valores son entre 0 y 1.50*</div>
+                    <div v-if="desgravamenError" class="error">Los valores son entre 0.01 y 1.50*</div>
                   </div>
                 </div>
                 <div class="values-input">
                   <div class="input">
                     <p>Valor Entregado</p>
-                    <pv-inputNumber v-model="delivered"/>
+                    <pv-inputNumber v-model="delivered" disabled/>
                   </div>
                   <div class="input">
                     <p>Valor Recibido</p>
-                    <pv-inputNumber v-model="received"/>
+                    <pv-inputNumber v-model="received" disabled/>
                   </div>
                 </div>
               </div>

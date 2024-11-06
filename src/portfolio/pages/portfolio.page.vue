@@ -50,6 +50,9 @@ export default {
     openModal() {
       this.showModal = true;
     },
+    closeModal(){
+      this.showModal = false;
+    }
   },
 };
 </script>
@@ -60,7 +63,7 @@ export default {
       <letter-list v-else :letters="letters" @add-letter="openModal"/>
     </div>
 
-    <new-letter v-if="showModal" :carteraId="carteraId" @submit="addLetter"/>
+    <new-letter v-if="showModal" :carteraId="carteraId" @submit="addLetter" @close="closeModal"/>
     <confirmation-modal v-if="showConfirmation" @close="showConfirmation = false" />
   </div>
 </template>
