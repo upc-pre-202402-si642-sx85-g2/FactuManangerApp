@@ -2,11 +2,12 @@
 import sidebar from "../../public/sidebar.component.vue";
 import { ref, computed, watch, onMounted } from "vue";
 import { LetraService } from "../../services/letra.service.js";
+import { OperationService } from "../../services/operation.service.js";
 
 export default {
   name: "operations",
   components: { sidebar },
-  setup() {
+  setup(props, { emit }) {
     const tea = ref(0);
     const desgravamen = ref(0);
     const selectedBank = ref(null);
@@ -15,7 +16,13 @@ export default {
     const teaError = ref(false);
     const desgravamenError = ref(false);
     const letrasApiService = new LetraService();
+    const operationService = new OperationService();
     const letters = ref([]);
+    const handleSellLetters = () => {
+      emit('sellLetters', selectedLetters.value);
+      sellLetters();
+    };
+
 
     const banks = ref([
       { label: 'BCP', value: 'bcp' },
@@ -47,6 +54,7 @@ export default {
         const letrasResponse = await letrasApiService.getLetrasByCarteraId(carteraId);
         letters.value = letrasResponse.data.map((letra, index) => ({
           ...letra,
+          id: letra._id,
           letterNumber: String(index + 1).padStart(3, '0'),
           issueDate: formatDate(letra.fecha_emision),
           expirationDate: formatDate(letra.fecha_vencimiento),
@@ -58,6 +66,7 @@ export default {
       }
     };
 
+
     const formatDate = (date) => {
       const d = new Date(date);
       const day = String(d.getDate()).padStart(2, '0');
@@ -68,7 +77,6 @@ export default {
 
     onMounted(fetchLetters);
 
-    // calcular la tea proporcionalmente al monto
     const calculateTEA = (amount, bank) => {
       const minAmount = 1000;
       const maxAmount = 100000;
@@ -80,7 +88,6 @@ export default {
       return teaMin + ((teaMax - teaMin) * (amount - minAmount) / (maxAmount - minAmount));
     };
 
-    // watch para rastrear la selección de letras y actualizar la TEA
     const updateTEA = () => {
       if (selectedBank.value && bankRates[selectedBank.value.value]) {
         const totalAmount = selectedLetters.value.reduce((total, letter) => total + letter.faceValue, 0);
@@ -98,7 +105,6 @@ export default {
 
     watch(selectedLetters, updateTEA, { deep: true });
 
-    // watch para rastrear la selección del banco y actualizar las tasas de interés
     watch(selectedBank, (newBank) => {
       if (newBank && bankRates[newBank.value]) {
         updateTEA();
@@ -111,14 +117,12 @@ export default {
       }
     });
 
-    // computed para calcular el monto entregado
     const delivered = computed(() => {
       return selectedLetters.value.reduce((total, letter) => {
         return total + calculateValorEntregado(letter.faceValue);
       }, 0);
     });
 
-    // computed para calcular el monto recibido
     const received = computed(() => {
       let totalReceived = 0;
       if (selectedLetters.value.length > 0 && selectedBank.value) {
@@ -142,8 +146,6 @@ export default {
       return totalReceived;
     });
 
-
-    // Calculus 🤓
     const calculatePeriodoDias = (fecha_vencimiento, fecha_descuento) => {
       const parseDate = (dateStr) => {
         const [day, month, year] = dateStr.split('/').map(Number);
@@ -195,14 +197,36 @@ export default {
     });
 
     watch(selectedLetters, (newSelection) => {
-      selectedLetterIds.value = newSelection.map(letter => letter.id);
+      console.log('New selection:', newSelection);
+      selectedLetterIds.value = newSelection.map(letter => {
+        console.log('Letter ID:', letter.id);
+        return letter.id;
+      }).filter(id => id !== undefined);
+      console.log('selectedLetterIds:', selectedLetterIds.value);
     }, { deep: true });
 
-    const sellLetters = () => {
-      if (!isInvalid.value) {
-        //TODO: enviar selectedLetterIds.value al backend
+    const sellLetters = async () => {
+      if (!isInvalid.value && selectedLetterIds.value.length > 0) {
+        const data = {
+          letraIds: selectedLetterIds.value,
+          banco: selectedBank.value?.label || '',
+          tasa_efectiva_anual: tea.value / 100,
+          desgravamen: desgravamen.value / 100
+        };
+
+        console.log('Datos a enviar:', data);
+
+        try {
+          const response = await operationService.createOperation(data);
+          console.log('Respuesta del servidor:', response.data);
+        } catch (error) {
+          console.error('Error creando operación:', error);
+        }
+      } else {
+        console.error('Datos inválidos o no hay letras seleccionadas');
       }
     };
+
 
     return {
       tea,
@@ -222,6 +246,7 @@ export default {
       selectedLetterIds,
       sellLetters,
       teaError,
+      handleSellLetters,
       desgravamenError,
       isInvalid
     };
@@ -294,7 +319,8 @@ export default {
           </template>
           <template #footer>
             <div class="button">
-              <pv-button :disabled="isInvalid" @click="$emit('sellLetters', selectedLetters)">Vender letra</pv-button>
+              <pv-button :disabled="isInvalid" @click="handleSellLetters">Vender letra</pv-button>
+
             </div>
           </template>
         </pv-card>
@@ -311,6 +337,7 @@ export default {
   font-size: 0.8em;
   margin: 5px 0 0 20px;
 }
+
 .p-select {
   min-width: 220px;
   width: auto;
