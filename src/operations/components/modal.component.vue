@@ -46,7 +46,7 @@ export default {
         <div v-if="modalType === 'error'">
           <div class="title">Error</div>
           <div class="card-content">
-            <p>Debes seleccionar una letra >:(</p>
+            <p>Debes seleccionar una letra o un banco >:(</p>
           </div>
         </div>
       </template>

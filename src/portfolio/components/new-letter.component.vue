@@ -34,10 +34,12 @@ export default {
     const validateForm = () => {
       nameError.value = name.value === '';
       issueDateError.value = issueDate.value === '';
-      expirationDateError.value = expirationDate.value <= issueDate.value;
+      const expirationDateObj = new Date(expirationDate.value);
+      const discountDateObj = new Date(discountDate.value);
+      expirationDateError.value = expirationDate.value <= issueDate.value || (expirationDateObj - discountDateObj) / (1000 * 60 * 60 * 24) < 90;
       rucError.value = !(ruc.value && ruc.value.toString().length === 11);
       discountDateError.value = discountDate.value <= issueDate.value || discountDate.value > expirationDate.value;
-      faceValueError.value = faceValue.value === '' || faceValue.value <= 0;
+      faceValueError.value = faceValue.value === '' || faceValue.value <= 0 || faceValue.value < 1000 || faceValue.value > 500000;
 
       return !(nameError.value || issueDateError.value || expirationDateError.value || rucError.value || discountDateError.value || faceValueError.value);
     };
@@ -77,6 +79,10 @@ export default {
       return `${year}-${month}-${day}`;
     };
 
+    const closeModal = () => {
+      emit('close');
+    };
+
     return {
       name,
       issueDate,
@@ -91,15 +97,22 @@ export default {
       discountDateError,
       faceValueError,
       submitLetterForm,
+      closeModal,
     };
   },
 };
 </script>
+
 <template>
-  <div class="modal-background">
-    <pv-card class="card">
+  <div class="modal-background" @click="closeModal">
+    <pv-card class="card" @click.stop>
       <template #title>
-        <div class="title">Agregar letra</div>
+        <div class="title-container">
+          <p class="title">Agregar letra</p>
+          <div class="close-container">
+            <pi class="pi pi-times icon close-button" @click="closeModal"></pi>
+          </div>
+        </div>
       </template>
       <template #content>
         <div class="card-content">
@@ -125,7 +138,7 @@ export default {
                 <pv-datePicker v-model="expirationDate" showIcon fluid iconDisplay="input" inputId="icondisplay" />
                 <label for="expirationDate"> Fecha de vencimiento </label>
               </pv-floatLabel>
-              <p v-if="expirationDateError" class="error">La fecha de vencimiento debe ser mayor a la fecha de emisión*</p>
+              <p v-if="expirationDateError" class="error">La fecha de vencimiento debe ser mayor a la fecha de emisión y al menos 90 días después de la fecha de descuento*</p>
             </div>
           </div>
 
@@ -151,7 +164,7 @@ export default {
                 <pv-inputNumber v-model="faceValue" inputId="faceValue" fluid />
                 <label for="faceValue"> Valor nominal </label>
               </pv-floatLabel>
-              <p v-if="faceValueError" class="error">El valor nominal debe ser mayor a cero*</p>
+              <p v-if="faceValueError" class="error">El valor nominal debe estar entre 1.000 y 500.000*</p>
             </div>
           </div>
         </div>
@@ -164,6 +177,7 @@ export default {
     </pv-card>
   </div>
 </template>
+
 <style scoped>
 .error {
   color: red;
@@ -194,13 +208,29 @@ export default {
   flex-direction: column;
 }
 
-.title {
+.title-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 45px;
+  position: relative;
   margin: 10px 0 50px;
+}
+
+.title {
+  font-size: 45px;
   color: #5b5b5b;
+}
+
+.close-container {
+  position: absolute;
+  right: 10px;
+  top: 0;
+}
+
+.close-button {
+  font-size: 30px;
+  cursor: pointer;
+  color: #9a9999;
 }
 
 .card-content {
@@ -246,7 +276,6 @@ export default {
   background-color: #789cff !important;
   border-color: #789cff !important;
   color: white !important;
-
 }
 
 :deep(.p-inputtext) {

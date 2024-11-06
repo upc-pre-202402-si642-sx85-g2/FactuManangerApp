@@ -18,7 +18,7 @@ export default {
 <template>
   <div class="registry-container">
     <div class="content">
-      <h1 style="text-align: center">Registro de Venta de Letra</h1>
+      <p class="title">Registro de Venta de Letra</p>
       <empty-registry v-if="letters.length === 0" />
       <registry-table v-else :letters="letters" />
     </div>
@@ -26,6 +26,14 @@ export default {
 </template>
 
 <style scoped>
+.title{
+  color: #435a97;
+  font-family: 'Open Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 40px;
+  font-weight: bold;
+  padding-top: 40px;
+  text-align: center;
+}
 .registry-container {
   display: flex;
   justify-content: flex-end;

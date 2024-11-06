@@ -90,7 +90,7 @@ export default {
                 </pv-column>
                 <pv-column header="">
                   <template #body="slotProps">
-                    <i class="pi pi-trash icon" @click="deleteLetter(slotProps.data._id)"></i>
+                    <pi class="pi pi-trash icon" @click="deleteLetter(slotProps.data._id)"></pi>
                   </template>
                 </pv-column>
               </pv-dataTable>
