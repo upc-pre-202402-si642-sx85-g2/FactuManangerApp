@@ -31,23 +31,23 @@ function formatCurrency(value) {
             </pv-column>
             <pv-column field="tea" header="TEA">
               <template #body="slotProps">
-                <span>{{ formatPercentage(slotProps.data.tea) }}</span>
+                <span>{{ formatPercentage(slotProps.data.tea*100) }}</span>
               </template>
             </pv-column>
             <pv-column field="tcea" header="TCEA">
               <template #body="slotProps">
-                <span>{{ formatPercentage(slotProps.data.tcea) }}</span>
+                <span>{{ formatPercentage(slotProps.data.tcea*100) }}</span>
               </template>
             </pv-column>
             <pv-column field="periodInDays" header="Periodo en días"></pv-column>
             <pv-column field="tep" header="TEP">
               <template #body="slotProps">
-                <span>{{ formatPercentage(slotProps.data.tep) }}</span>
+                <span>{{ formatPercentage(slotProps.data.tep*100) }}</span>
               </template>
             </pv-column>
             <pv-column field="discountedRate" header="Tasa descontada">
               <template #body="slotProps">
-                <span>{{ formatPercentage(slotProps.data.discountedRate) }}</span>
+                <span>{{ formatPercentage(slotProps.data.discountedRate*100) }}</span>
               </template>
             </pv-column>
             <pv-column field="deliveredValue" header="Valor Entregado">

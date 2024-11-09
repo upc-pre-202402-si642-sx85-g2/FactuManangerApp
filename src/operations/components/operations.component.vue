@@ -1,12 +1,13 @@
 <script>
 import sidebar from "../../public/sidebar.component.vue";
+import modalInstructions from "./modal.component.vue";
 import { ref, computed, watch, onMounted } from "vue";
 import { LetraService } from "../../services/letra.service.js";
 import { OperationService } from "../../services/operation.service.js";
 
 export default {
   name: "operations",
-  components: { sidebar },
+  components: { sidebar, modalInstructions },
   setup(props, { emit }) {
     const tea = ref(0);
     const desgravamen = ref(0);
@@ -18,11 +19,8 @@ export default {
     const letrasApiService = new LetraService();
     const operationService = new OperationService();
     const letters = ref([]);
-    const handleSellLetters = () => {
-      emit('sellLetters', selectedLetters.value);
-      sellLetters();
-    };
-
+    const showModal = ref(false);
+    const modalType = ref('');
 
     const banks = ref([
       { label: 'BCP', value: 'bcp' },
@@ -65,7 +63,6 @@ export default {
         console.error('Error fetching letters:', error);
       }
     };
-
 
     const formatDate = (date) => {
       const d = new Date(date);
@@ -193,16 +190,11 @@ export default {
     };
 
     const isInvalid = computed(() => {
-      return teaError.value || desgravamenError.value;
+      return teaError.value || desgravamenError.value || selectedLetters.value.length === 0 || !selectedBank.value;
     });
 
     watch(selectedLetters, (newSelection) => {
-      console.log('New selection:', newSelection);
-      selectedLetterIds.value = newSelection.map(letter => {
-        console.log('Letter ID:', letter.id);
-        return letter.id;
-      }).filter(id => id !== undefined);
-      console.log('selectedLetterIds:', selectedLetterIds.value);
+      selectedLetterIds.value = newSelection.map(letter => letter.id).filter(id => id !== undefined);
     }, { deep: true });
 
     const sellLetters = async () => {
@@ -214,19 +206,20 @@ export default {
           desgravamen: desgravamen.value / 100
         };
 
-        console.log('Datos a enviar:', data);
-
         try {
           const response = await operationService.createOperation(data);
           console.log('Respuesta del servidor:', response.data);
+          modalType.value = 'success';
         } catch (error) {
           console.error('Error creando operación:', error);
+          modalType.value = 'error';
         }
       } else {
         console.error('Datos inválidos o no hay letras seleccionadas');
+        modalType.value = 'error';
       }
+      showModal.value = true;
     };
-
 
     return {
       tea,
@@ -246,9 +239,10 @@ export default {
       selectedLetterIds,
       sellLetters,
       teaError,
-      handleSellLetters,
       desgravamenError,
-      isInvalid
+      isInvalid,
+      showModal,
+      modalType
     };
   }
 };
@@ -295,12 +289,14 @@ export default {
                   </div>
                   <div class="input">
                     <p>Tasa Efectiva Anual</p>
-                    <pv-inputNumber v-model="tea" :disabled="selectedBank?.value !== 'custom'" :mode="'decimal'" :minFractionDigits="2" :maxFractionDigits="2" :min="0"/>
+                    <pv-inputNumber v-model="tea" :disabled="selectedBank?.value !== 'custom'" :mode="'decimal'"
+                                    :minFractionDigits="2" :maxFractionDigits="2" :min="0"/>
                     <div v-if="teaError" class="error">Los valores son entre 3 y 90*</div>
                   </div>
                   <div class="input">
                     <p>Seguro Desgravamen</p>
-                    <pv-inputNumber v-model="desgravamen" :disabled="selectedBank?.value !== 'custom'" :mode="'decimal'" :minFractionDigits="2" :maxFractionDigits="2" :min="0"/>
+                    <pv-inputNumber v-model="desgravamen" :disabled="selectedBank?.value !== 'custom'" :mode="'decimal'"
+                                    :minFractionDigits="2" :maxFractionDigits="2" :min="0"/>
                     <div v-if="desgravamenError" class="error">Los valores son entre 0.01 y 1.50*</div>
                   </div>
                 </div>
@@ -319,13 +315,13 @@ export default {
           </template>
           <template #footer>
             <div class="button">
-              <pv-button :disabled="isInvalid" @click="handleSellLetters">Vender letra</pv-button>
-
+              <pv-button :disabled="isInvalid" @click="sellLetters">Vender letra</pv-button>
             </div>
           </template>
         </pv-card>
       </div>
     </div>
+    <modal-instructions v-if="showModal" :modalType="modalType" @close-modal="showModal = false"/>
   </div>
 </template>
 

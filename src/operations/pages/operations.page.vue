@@ -17,7 +17,7 @@ export default {
 
     const handleSellLetter = (letters) => {
       selectedLetters.value = letters;
-      if (letters.length > 0 && selectedBank.value) {
+      if (letters.length > 0 ) {
         modalType.value = 'success';
       } else {
         modalType.value = 'error';

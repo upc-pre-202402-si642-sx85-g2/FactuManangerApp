@@ -128,7 +128,7 @@ export default {
   margin: 0 auto;
   padding: 20px;
   flex-direction: column;
-  margin-left: 300px;
+  margin-left: 400px;
 }
 
 .title {
