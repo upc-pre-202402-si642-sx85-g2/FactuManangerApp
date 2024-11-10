@@ -105,6 +105,7 @@ export default {
   position: fixed;
   width: 320px;
   transition: width 0.3s ease-in-out;
+  z-index: 1000;
 }
 
 .logo img {
