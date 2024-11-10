@@ -124,7 +124,7 @@ export default {
   font-family: 'Open Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-size: 20px;
   font-weight: bold;
-  padding-top: 90px;
+  padding-top: 40px;
   text-align: center;
 }
 
@@ -194,4 +194,16 @@ export default {
   font-size: 25px !important;
   text-align: center !important;
 }
+@media (max-width: 1500px) {
+  .container {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .content {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 </style>

@@ -86,4 +86,30 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
+@media (max-width: 1500px) {
+  .card{
+    width: 70%;
+  }
+
+}
+@media (max-width: 768px) {
+  .card{
+    width: 70%;
+  }
+  .title {
+    font-size: 30px;
+    margin: 10px 0 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card{
+    width: 70%;
+  }
+  .title {
+    font-size: 24px;
+    margin: 5px 0 10px;
+  }
+}
 </style>

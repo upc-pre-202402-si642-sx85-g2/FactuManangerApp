@@ -213,7 +213,7 @@ export default {
   justify-content: center;
   align-items: center;
   position: relative;
-  margin: 10px 0 50px;
+  margin: 10px 0 20px;
 }
 
 .title {

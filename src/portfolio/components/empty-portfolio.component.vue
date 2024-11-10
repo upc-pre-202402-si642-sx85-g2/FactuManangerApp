@@ -40,7 +40,6 @@ export default {
 
 .content {
   flex: 1;
-  padding: 20px;
   margin-left: 320px;
 }
 
@@ -63,7 +62,7 @@ export default {
 
 .titulo {
   color: #435a97;
-  padding-top: 90px;
+  padding-top: 70px;
   font-family: 'Open Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: bold;
   font-size: 20px;
@@ -102,5 +101,66 @@ export default {
   display:flex;
   justify-content:center;
   align-items: center;
+}
+
+@media (max-width: 1500px) {
+  .content {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 10px;
+  }
+
+  .titulo {
+    font-size: 18px;
+    padding-top: 60px;
+  }
+
+  .card {
+    height: auto;
+    width: 100%;
+  }
+
+  .card-content img {
+    width: 200px;
+    margin: 20px 0 50px 0;
+  }
+
+  .card-content p {
+    font-size: 30px;
+  }
+
+  .p-button {
+    width: 10em;
+    height: 2em;
+    font-size: 20px;
+    margin: 20px 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .titulo {
+    font-size: 16px;
+  }
+
+  .card-content img {
+    width: 150px;
+    margin: 10px 0 30px 0;
+  }
+
+  .card-content p {
+    font-size: 24px;
+  }
+
+  .p-button {
+    width: 8em;
+    height: 1.8em;
+    font-size: 18px;
+    margin: 10px 20px;
+  }
 }
 </style>
