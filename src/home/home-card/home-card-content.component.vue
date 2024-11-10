@@ -125,7 +125,6 @@ export default {
 .container {
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
   padding: 20px;
   flex-direction: column;
   margin-left: 400px;
@@ -139,12 +138,12 @@ export default {
 }
 
 .section {
-  margin-bottom: 60px; /* Space between sections */
+  margin-bottom: 60px;
 }
 
 .section-title {
-  margin-bottom: 20px; /* Space between title and card */
-  text-align: center; /* Center the title */
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .card {
@@ -152,7 +151,7 @@ export default {
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   padding: 50px;
-  width: 100%; /* Adjust width to 100% */
+  width: 100%;
 }
 
 .card-content-grid {
@@ -166,31 +165,41 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center; /* Center text within the card */
+  text-align: center;
 }
 
 .special-card h2 {
   margin: 15px 0;
-  font-size: 50px; /* Increase text size */
+  font-size: 50px;
 }
 
 .card-content-grid-sold {
   display: flex;
-  flex-wrap: wrap; /* Ensure responsiveness */
-  justify-content: center; /* Center the cards */
-  gap: 20px; /* Space between cards */
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+@media (max-width: 1500px) {
+  .container {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 @media (max-width: 1700px) {
   .card-content-grid-sold {
-    gap: 10px; /* Reduce gap between cards */
+    gap: 10px;
   }
   .special-card h2{
     font-size: 30px;
   }
 
   .special-card {
-    width: 45%; /* Shrink the cards */
+    width: 45%;
   }
 }
 @media (max-width: 1500px) {
@@ -200,21 +209,21 @@ export default {
 }
 @media (max-width: 1024px) {
   .card-content-grid {
-    grid-template-columns: repeat(2, 1fr); /* Adjust to 2 columns on small screens */
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .special-card {
-    width: 100%; /* Full width on small screens */
+    width: 100%;
   }
 }
 
 @media (max-width: 768px) {
   .card-content-grid {
-    grid-template-columns: 1fr; /* Collapse to 1 column on very small screens */
+    grid-template-columns: 1fr;
   }
 
   .special-card {
-    width: 100%; /* Full width on small screens */
+    width: 100%;
   }
 }
 
