@@ -138,4 +138,38 @@ export default {
   border-color: #789cff !important;
   color: white !important;
 }
+
+@media (max-width: 1500px) {
+  .card {
+    width: 70%;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 70%;
+  }
+
+  .title {
+    font-size: 35px;
+  }
+
+  .button {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    width: 70%;
+  }
+
+  .title {
+    font-size: 35px;
+  }
+
+  .button {
+    font-size: 18px;
+  }
+}
 </style>

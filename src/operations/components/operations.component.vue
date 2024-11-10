@@ -326,6 +326,11 @@ export default {
 </template>
 
 <style scoped>
+
+.input p{
+  margin:30px 0 0 0;
+}
+
 .error {
   color: red;
   font-family: 'Lato', sans-serif;
@@ -339,6 +344,7 @@ export default {
   width: auto;
   font-family: "Onest", sans-serif;
   font-weight: 200;
+
 }
 
 .subtitle {
@@ -360,8 +366,8 @@ export default {
   background-color: #f6f6f6;
   box-shadow: 0 5px 5px rgb(0, 0, 0, 0.2);
   width: 60vw;
-  height: 32vh;
-  margin: 10px 0 20px 0;
+  height: 30vh;
+  margin-bottom: 10px;
   overflow-x: auto;
   overflow-y: auto;
 }
@@ -397,7 +403,6 @@ export default {
 }
 
 .input-container {
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -416,6 +421,7 @@ export default {
   display: flex;
   justify-content: space-around;
   width: 100%;
+
 }
 
 .disabled-inputs .input {
@@ -423,7 +429,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  margin-bottom: 20px;
+
 }
 
 .content {
@@ -455,6 +461,7 @@ export default {
   font-weight: bold;
   font-size: 40px;
   text-align: center;
+  margin-bottom: 0;
 }
 
 .card {
@@ -462,7 +469,7 @@ export default {
   align-items: center;
   background-color: white;
   box-shadow: 0 5px 5px rgb(0, 0, 0, 0.2);
-  height: 82vh;
+  height: auto;
   margin-top: 60px;
   width: 90%;
 }
@@ -477,11 +484,52 @@ export default {
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: bold;
   font-size: 20px;
+
 }
 
 .operations {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media (max-width: 1500px) {
+  .content {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .values-input {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .disabled-inputs {
+    flex-direction: column;
+    align-items: center;
+  }
+  .p-inputnumber{
+    width: 100%;
+  }
+
+  .disabled-inputs .input, .values-input .input {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .values-input {
+    width: 100%;
+  }
+
+  .disabled-inputs .input, .values-input .input {
+    width: 100%;
+    margin-bottom: 20px;
+  }
 }
 </style>
