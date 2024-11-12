@@ -36,10 +36,11 @@ export default {
       issueDateError.value = issueDate.value === '';
       const expirationDateObj = new Date(expirationDate.value);
       const discountDateObj = new Date(discountDate.value);
-      expirationDateError.value = expirationDate.value <= issueDate.value || (expirationDateObj - discountDateObj) / (1000 * 60 * 60 * 24) < 90;
+      const issueDateObj = new Date(issueDate.value);
+      expirationDateError.value = expirationDate.value <= issueDate.value || (expirationDateObj - discountDateObj) / (1000 * 60 * 60 * 24) < 90 || (expirationDateObj - issueDateObj) / (1000 * 60 * 60 * 24) < 90;
       rucError.value = !(ruc.value && ruc.value.toString().length === 11);
       discountDateError.value = discountDate.value <= issueDate.value || discountDate.value > expirationDate.value;
-      faceValueError.value = faceValue.value === '' || faceValue.value <= 0 || faceValue.value < 1000 || faceValue.value > 500000;
+      faceValueError.value = faceValue.value === undefined || faceValue.value === '' || faceValue.value <= 0 || faceValue.value < 1000 || faceValue.value > 500000;
 
       return !(nameError.value || issueDateError.value || expirationDateError.value || rucError.value || discountDateError.value || faceValueError.value);
     };
@@ -138,7 +139,7 @@ export default {
                 <pv-datePicker v-model="expirationDate" showIcon fluid iconDisplay="input" inputId="icondisplay" />
                 <label for="expirationDate"> Fecha de vencimiento </label>
               </pv-floatLabel>
-              <p v-if="expirationDateError" class="error">La fecha de vencimiento debe ser mayor a la fecha de emisión y al menos 90 días después de la fecha de descuento*</p>
+              <p v-if="expirationDateError" class="error">La fecha de vencimiento debe ser mayor a la fecha de emisión por al menos 90 días y al menos 90 días después de la fecha de descuento*</p>
             </div>
           </div>
 
