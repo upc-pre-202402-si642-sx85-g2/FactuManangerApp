@@ -51,11 +51,28 @@ export default {
   display: flex;
   justify-content: flex-end;
   height: 100vh;
-  padding-left: 15%;
+  margin-left: 310px;
 }
 
 .content {
   height: 80%;
   margin: auto;
+}
+
+@media (max-width: 1449px) {
+  .registry-container {
+    margin-left: 0;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 769px) {
+  .card {
+    margin-left: 0;
+    width: 100%;
+    padding: 10px;
+    align-self: flex-start;
+  }
+
 }
 </style>

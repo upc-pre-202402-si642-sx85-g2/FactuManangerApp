@@ -30,18 +30,32 @@
   box-shadow: 0 5px 5px rgb(0, 0, 0, 0.2);
 }
 
-:deep(.p-datatable-tbody > tr > td) {
-  text-align: center;
-}
-
-:deep(.p-datatable-header-cell) {
-  text-align: center;
-}
 .registry{
   display: flex;
   flex-direction: column;
   gap: 3em;
   align-items: center;
   height: 100%;
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 70%;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .card {
+    width: 70%;
+  }
+
+
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 </style>

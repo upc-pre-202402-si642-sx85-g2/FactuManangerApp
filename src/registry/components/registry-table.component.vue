@@ -21,7 +21,7 @@ function formatCurrency(value) {
   <div class="registry-table">
     <pv-card class="card">
       <template #content>
-        <div class="registry">
+        <div class="registry letter-card">
           <pv-dataTable :value="letters">
             <pv-column field="bank" header="Banco"></pv-column>
             <pv-column field="nominalValue" header="Valor Nominal">
@@ -68,24 +68,65 @@ function formatCurrency(value) {
 </template>
 
 <style scoped>
+
 .registry-table {
   margin-top: 3em;
   height: 70%;
 }
+
 .card {
   height: 100%;
+  padding: 10px;
   background-color: white;
+  overflow-x: auto;
+  overflow-y: auto;
   box-shadow: 0 5px 5px rgb(0, 0, 0, 0.2);
 }
+
 .pv-column {
   text-align: center;
 }
 
+.p-datatable-tbody > tr {
+  font-family: sans-serif !important;
+}
+
 :deep(.p-datatable-tbody > tr > td) {
-  text-align: center;
+  font-family: "Onest", sans-serif !important;
+  font-weight: 200;
+  text-align: center !important;
 }
 
 :deep(.p-datatable-header-cell) {
-  text-align: center;
+  font-family: "Open Sans", serif;
+  font-size: 20px !important;
+  text-align: center !important;
+}
+
+/* Media Queries */
+@media (max-width: 1500px) {
+  .card {
+    width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+  }
+
+  :deep(.p-datatable-header-cell) {
+    font-size: 18px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    width: 100%;
+  }
+
+  :deep(.p-datatable-header-cell) {
+    font-size: 16px !important;
+  }
 }
 </style>
