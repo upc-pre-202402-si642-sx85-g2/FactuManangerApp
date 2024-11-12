@@ -108,11 +108,6 @@ export default {
   cursor: pointer;
 }
 
-.container {
-  display: flex;
-  height: 100vh;
-}
-
 .content {
   flex: 1;
   margin-left: 320px;
@@ -206,4 +201,11 @@ export default {
   }
 }
 
+@media (max-width: 700px) {
+  .button{
+    display:flex;
+    justify-content: center;
+    padding: 10px;
+  }
+}
 </style>
