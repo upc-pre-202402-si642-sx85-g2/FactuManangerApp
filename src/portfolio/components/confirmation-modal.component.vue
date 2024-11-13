@@ -3,7 +3,7 @@ export default {
   name: "confirmation-modal",
   methods: {
     goBack() {
-      window.location.reload();
+      this.$emit('refresh-letters');
     }
   }
 };
@@ -25,7 +25,6 @@ export default {
     </pv-card>
   </div>
 </template>
-
 <style scoped>
 .button {
   display: flex;

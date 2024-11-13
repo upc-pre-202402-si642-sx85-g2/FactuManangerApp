@@ -30,7 +30,6 @@ export default {
 
     const letraService = new LetraService();
 
-    //validaciones
     const validateForm = () => {
       nameError.value = name.value === '';
       issueDateError.value = issueDate.value === '';
@@ -71,7 +70,6 @@ export default {
       }
     };
 
-    //formateo de la fecha para el backend
     const formatDate = (date) => {
       const d = new Date(date);
       const year = d.getFullYear();

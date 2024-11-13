@@ -1,9 +1,10 @@
 <script>
+import { ref, watch } from 'vue';
+import { useLetterStore } from '../../stores/letterStore';
 import emptyPortfolio from "../components/empty-portfolio.component.vue";
 import letterList from "../components/letter-list.component.vue";
 import newLetter from "../components/new-letter.component.vue";
 import confirmationModal from "../components/confirmation-modal.component.vue";
-import { LetraService } from "../../services/letra.service.js";
 
 export default {
   name: "Portfolio",
@@ -13,58 +14,66 @@ export default {
     newLetter,
     confirmationModal,
   },
-  data() {
-    return {
-      letters: [],
-      showModal: false,
-      showConfirmation: false,
-      letrasApiService: new LetraService(),
-      carteraId: null,
-    };
-  },
-  async created() {
-    try {
+  setup() {
+    const letterStore = useLetterStore();
+    const showModal = ref(false);
+    const showConfirmation = ref(false);
+    const lettersKey = ref(0);
+
+    const fetchLetters = async () => {
       const userId = sessionStorage.getItem('userId');
-      if (!userId) {
-        throw new Error('User ID not found in session storage');
+      if (userId) {
+        await letterStore.fetchLetters(userId);
+        lettersKey.value += 1; // Update key to force re-render
       }
+    };
 
-      // Fetch cartera
-      const carteraResponse = await this.letrasApiService.getCarteraByUserId(userId);
-      const cartera = carteraResponse.data[0];
-      this.carteraId = cartera._id;
+    const addLetter = async (letter) => {
+      await letterStore.addLetter(letter);
+      await fetchLetters();
+      showModal.value = false;
+      showConfirmation.value = true;
+    };
 
-      // Fetch letras
-      const letrasResponse = await this.letrasApiService.getLetrasByCarteraId(cartera._id);
-      this.letters = letrasResponse.data;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  },
-  methods: {
-    addLetter(letter) {
-      this.letters.push(letter);
-      this.showModal = false;
-      this.showConfirmation = true;
-    },
-    openModal() {
-      this.showModal = true;
-    },
-    closeModal(){
-      this.showModal = false;
-    }
-  },
+    const openModal = () => {
+      showModal.value = true;
+    };
+
+    const closeModal = async () => {
+      showModal.value = false;
+      await fetchLetters();
+    };
+
+    const refreshLetters = async () => {
+      showConfirmation.value = false;
+      await fetchLetters();
+    };
+
+    fetchLetters();
+
+    return {
+      letters: letterStore.letters,
+      carteraId: letterStore.carteraId,
+      showModal,
+      showConfirmation,
+      lettersKey,
+      addLetter,
+      openModal,
+      closeModal,
+      refreshLetters,
+    };
+  }
 };
 </script>
 <template>
   <div class="portfolio-container">
     <div class="content">
       <emptyPortfolio v-if="letters.length === 0" @add-letter="openModal"/>
-      <letter-list v-else :letters="letters" @add-letter="openModal"/>
+      <letter-list v-else :letters="letters" :key="lettersKey" @add-letter="openModal"/>
     </div>
 
     <new-letter v-if="showModal" :carteraId="carteraId" @submit="addLetter" @close="closeModal"/>
-    <confirmation-modal v-if="showConfirmation" @close="showConfirmation = false" />
+    <confirmation-modal v-if="showConfirmation" @refresh-letters="refreshLetters"/>
   </div>
 </template>
 <style scoped>

@@ -15,10 +15,12 @@ import 'primeflex/themes/primeone-light.css'
 import InputNumber from "primevue/inputnumber";
 import DatePicker from "primevue/datepicker";
 import Select from 'primevue/select';
+import {createPinia} from "pinia";
 
 
 
 const app = createApp(App);
+const pinia = createPinia();
 
 app.
     use(PrimeVue,{theme: {
@@ -30,6 +32,7 @@ app.
     },
 }})
     .use(router)
+    .use(pinia)
     .component('pv-dataTable', DataTable)
     .component('pv-column', Column)
     .component('pv-card', Card)
