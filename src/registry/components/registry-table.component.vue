@@ -103,30 +103,13 @@ function formatCurrency(value) {
   text-align: center !important;
 }
 
-/* Media Queries */
-@media (max-width: 1500px) {
-  .card {
-    width: 90%;
-  }
-}
-
-@media (max-width: 768px) {
-  .card {
-    width: 100%;
-  }
-
+@media (max-width: 700px) {
   :deep(.p-datatable-header-cell) {
-    font-size: 18px !important;
+    font-size: 25px !important;
   }
-}
-
-@media (max-width: 480px) {
   .card {
-    width: 100%;
-  }
-
-  :deep(.p-datatable-header-cell) {
-    font-size: 16px !important;
+    height: 70vh;
   }
 }
+
 </style>

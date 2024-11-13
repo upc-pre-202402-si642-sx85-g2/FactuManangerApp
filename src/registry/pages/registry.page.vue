@@ -49,29 +49,32 @@ export default {
 }
 .registry-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   height: 100vh;
   margin-left: 310px;
 }
 
 .content {
-  height: 80%;
+  height: 90%;
+  width: 85%;
   margin: auto;
 }
 
-@media (max-width: 1449px) {
+@media (max-width: 1500px) {
   .registry-container {
     margin-left: 0;
     padding: 20px;
+    justify-content: center;
   }
 }
 
-@media (max-width: 769px) {
-  .card {
-    margin-left: 0;
-    width: 100%;
-    padding: 10px;
-    align-self: flex-start;
+@media (max-width: 700px) {
+  .title{
+    font-size: 40px;
+    padding: 0;
+  }
+  .content{
+    width: 90%;
   }
 
 }
