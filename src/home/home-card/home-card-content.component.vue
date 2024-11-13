@@ -56,7 +56,11 @@ export default {
       return new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(value);
     },
     formatDate(date) {
-      return new Date(date).toISOString().split('T')[0]; // Format date to YYYY-MM-DD
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${day}/${month}/${year}`;
     }
   }
 };

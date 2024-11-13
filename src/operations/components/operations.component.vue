@@ -520,6 +520,7 @@ export default {
     width: 100%;
     margin-bottom: 20px;
   }
+
 }
 
 @media (max-width: 480px) {

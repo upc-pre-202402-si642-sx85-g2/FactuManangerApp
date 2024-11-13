@@ -295,8 +295,8 @@ export default {
   font-size: medium !important;
 }
 
-/* Media Queries */
-@media (max-width: 768px) {
+
+@media (max-width: 750px) {
   .card-content {
     flex-direction: column;
     align-items: center;
@@ -304,6 +304,14 @@ export default {
 
   .right-content, .left-content {
     width: 80%;
+  }
+
+  .input {
+    margin-bottom: 40px;
+  }
+
+  .card{
+    width: 40vh;
   }
 }
 </style>
